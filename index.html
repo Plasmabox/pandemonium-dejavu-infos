@@ -55,6 +55,8 @@ header.hero{min-height:min(88vh,760px);display:flex;flex-direction:column;justif
 .hero .meta{font-family:var(--mono);font-size:.85rem;color:var(--muted);margin-top:24px}
 .privacy{border-left:3px solid var(--green);background:rgba(60,255,100,.06);padding:12px 16px;margin-top:22px;max-width:640px}
 .privacy b{color:var(--green)}
+.privacy ul{margin:8px 0 0;padding-left:18px}
+.privacy li{margin:4px 0}
 nav.toc{font-family:var(--mono);font-size:.85rem;display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:26px}
 nav.toc a{color:var(--ink2);text-decoration:none;border-bottom:1px dotted var(--edge)}
 
@@ -99,10 +101,18 @@ footer{border-top:1px solid var(--edge);margin-top:70px;padding-top:18px;color:v
   <p>You've seen this before. A camera on my chest films the dancefloor; the screen below it plays
   the party back to you — not now, but <b>seconds or minutes ago</b>, at random, interrupted by
   subliminal flashes from films about time.</p>
-  <div class="privacy"><b>Nothing is ever recorded.</b> Memories live a few minutes in the
-  costume's RAM, are overwritten at random, and vanish for good when it's switched off.
-  Nothing is written to the SD card, nothing is uploaded, and the costume has no Wi-Fi or internet.</div>
-  <div class="meta">STATUS: WORK IN PROGRESS · LAST UPDATE 2026-10-20</div>
+  <div class="privacy"><b>What the costume keeps, and what it doesn't</b>
+  <ul>
+  <li><b>Video — never saved.</b> Memories live a few minutes in the costume's RAM, are overwritten
+  at random, and vanish for good when it's switched off. No video is ever written to the SD card.</li>
+  <li><b>Sound — never recorded.</b> The microphone only measures loudness and detects the kick drum
+  to animate the screen. No audio is stored, anywhere.</li>
+  <li><b>bitchat chats — shown and logged.</b> Messages posted in the public <b>#mesh</b> channel and
+  private messages sent to the costume are displayed on the screen and saved on its SD card (date,
+  time, nicknames, text) for its owner. Only write what you'd be fine seeing on a screen and kept.</li>
+  </ul>
+  Nothing is uploaded: the costume has no Wi-Fi and no internet connection.</div>
+  <div class="meta">STATUS: WORK IN PROGRESS · LAST UPDATE 2026-10-31</div>
   <nav class="toc">
     <a href="#what">What you're seeing</a><a href="#cycle">The memory cycle</a>
     <a href="#hud">The screen</a><a href="#hardware">Hardware</a><a href="#bom">Parts &amp; cost</a>
@@ -375,8 +385,10 @@ look for <b class="mono">MORDREAD_COSTUME</b>.</p>
 <ul>
 <li>Messages in the public <b>#mesh</b> channel appear in cyan bubbles on the screen, with your nickname.</li>
 <li>Private messages are end-to-end encrypted (Noise XX) — the costume decrypts them itself and
-shows them in amber. It can't chat back; it'll auto-reply once to say so.</li>
-<li>Be nice: what you write is shown to the whole dancefloor. Nothing is stored.</li>
+shows them in amber. It can't chat back: it auto-replies (in English and French) with a link to
+this page.</li>
+<li>Be nice: what you write is shown to the whole dancefloor, and both public and private messages
+are logged on the costume's SD card.</li>
 </ul>
 </div>
 
@@ -481,7 +493,7 @@ shows them in amber. It can't chat back; it'll auto-reply once to say so.</li>
     <li>HUD: memory bank &amp; tape, events, system, mic, beat, 3D objects</li>
     <li>Glitches: silent-film stills + 33 film quotes, film year on the red display</li>
     <li>TERMINATOR motion tracking + filters</li>
-    <li>bitchat: public &amp; encrypted private messages, owner commands</li>
+    <li>bitchat: public &amp; encrypted private messages, owner commands, chat log on the SD card</li>
     <li>Night mode lock, 12 h+ battery test</li></ul></div>
   <div class="card"><h3 class="a">Next</h3><ul style="margin:0;padding-left:18px">
     <li>Mechanical integration: mount, harness, cable routing, ventilation for the IR projectors</li>
@@ -493,9 +505,9 @@ should be identified), saving clips to the SD card (memories must stay ephemeral
 (photosensitive safety — all blinking stays under 3 Hz).</p>
 
 <footer>
-  <p>Glitch images: public-domain silent and early films (<i>A Trip to the Moon</i>, <i>Nosferatu</i>,
-  <i>The Cabinet of Dr. Caligari</i>, <i>The General</i>, <i>Faust</i>, <i>The Phantom of the Opera</i>,
-  <i>Night of the Living Dead</i>…). Quotes from films about time, for a one-night art piece.</p>
+  <p>Glitch images: stills from films about time (<i>Fight Club</i>, <i>Tenet</i>, <i>Back to the
+  Future</i>…), shown for a fraction of a second in a one-night, non-commercial art piece. Quotes from
+  the same films.</p>
   <p>Built on the Waveshare ESP32-P4 BSP, Espressif ESP-IDF, LVGL, NimBLE, libsodium; bitchat by
   permissionless tech. Developed with Claude Code.</p>
   <p>DÉJÀ VU · Pandémonium VII · Montréal 2026</p>
