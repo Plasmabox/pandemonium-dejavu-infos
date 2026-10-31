@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DÉJÀ VU — a wearable memory machine</title>
+<meta name="description" content="A techno-party costume that films the crowd and replays it, seconds or minutes later, on a screen worn on the chest. ESP32-P4, hardware H.264, LVGL HUD, bitchat over Bluetooth.">
+<meta property="og:title" content="DÉJÀ VU — a wearable memory machine">
+<meta property="og:description" content="You've seen this before. A costume that remembers the party and replays it on its chest.">
+<style>
+:root{
+  --bg:#14151b; --card:#2E2F39; --edge:#474956; --ink:#e8e9ee; --ink2:#a9abb8; --muted:#7c7e8c;
+  --cyan:#3ad7f0; --amber:#ffb340; --green:#3cff64; --red:#ff4a4a; --chart:#1aa3bd;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--sans);
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px)}
+a{color:var(--cyan)}
+main{max-width:980px;margin:0 auto;padding:0 18px 80px}
+h1,h2,h3{font-family:var(--mono);letter-spacing:.06em;line-height:1.2}
+h2{font-size:1.25rem;color:var(--cyan);margin:64px 0 6px;text-transform:uppercase}
+h2::before{content:"// ";color:var(--muted)}
+h3{font-size:1rem;margin:0 0 6px;text-transform:uppercase}
+.lead{color:var(--ink2);margin-top:0}
+code,.mono{font-family:var(--mono);font-size:.9em}
+.card{background:var(--card);border:1px solid var(--edge);padding:16px 18px;margin:12px 0}
+.grid{display:grid;gap:12px}
+@media(min-width:720px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}}
+.tag{display:inline-block;font:600 11px var(--mono);letter-spacing:.08em;padding:2px 7px;border:1px solid currentColor;margin-right:6px;text-transform:uppercase}
+.c{color:var(--cyan)}.a{color:var(--amber)}.g{color:var(--green)}.r{color:var(--red)}.m{color:var(--muted)}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--mono)}
+figure{margin:16px 0}
+figure{overflow-x:auto}
+@media(max-width:719px){figure svg{min-width:720px}}
+figcaption{font-size:.85rem;color:var(--muted);margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--edge);vertical-align:top}
+th{font:600 12px var(--mono);letter-spacing:.06em;color:var(--ink2);text-transform:uppercase}
+td.num,th.num{text-align:right;white-space:nowrap;font-family:var(--mono)}
+.scroll{overflow-x:auto}
+
+/* hero */
+header.hero{min-height:min(88vh,760px);display:flex;flex-direction:column;justify-content:center;max-width:980px;margin:0 auto;padding:40px 18px}
+.hero .kicker{font:600 12px var(--mono);letter-spacing:.2em;color:var(--muted)}
+.hero h1{font-size:clamp(3rem,13vw,7.5rem);margin:.1em 0;color:var(--ink);position:relative;letter-spacing:.04em}
+.hero h1 span{color:var(--cyan)}
+.hero h1::after{content:"DÉJÀ VU";position:absolute;left:3px;top:2px;color:var(--red);opacity:.35;z-index:-1;animation:ghost 6s infinite steps(1)}
+@keyframes ghost{0%,93%{transform:translate(0,0);opacity:.0}94%{transform:translate(-6px,1px);opacity:.5}96%{transform:translate(5px,-2px);opacity:.4}98%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.hero h1::after{animation:none}}
+.hero p{font-size:1.15rem;max-width:640px;color:var(--ink2)}
+.hero .meta{font-family:var(--mono);font-size:.85rem;color:var(--muted);margin-top:24px}
+.privacy{border-left:3px solid var(--green);background:rgba(60,255,100,.06);padding:12px 16px;margin-top:22px;max-width:640px}
+.privacy b{color:var(--green)}
+nav.toc{font-family:var(--mono);font-size:.85rem;display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:26px}
+nav.toc a{color:var(--ink2);text-decoration:none;border-bottom:1px dotted var(--edge)}
+
+/* timeline */
+.tl{border-left:2px solid var(--edge);margin:18px 0 0 6px;padding-left:20px}
+.tl .ev{position:relative;margin-bottom:18px}
+.tl .ev::before{content:"";position:absolute;left:-27px;top:6px;width:12px;height:12px;background:var(--bg);border:2px solid var(--cyan);transform:rotate(45deg)}
+.tl .ev.pivot::before{border-color:var(--amber);background:var(--amber)}
+.tl .date{font:600 12px var(--mono);color:var(--muted);letter-spacing:.06em}
+.tl .ev h3{margin:2px 0 4px}
+.tl .ev p{margin:0;color:var(--ink2)}
+
+/* challenges */
+.ch h3{color:var(--amber)}
+.ch .sol{color:var(--ink2);margin:6px 0 0}
+.ch .sol::before{content:"→ ";color:var(--green);font-family:var(--mono)}
+.ch p{margin:0}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:16px 0}
+.stat{background:var(--card);border:1px solid var(--edge);padding:14px}
+.stat .v{font:600 1.7rem var(--mono);color:var(--ink)}
+.stat .l{font-size:.8rem;color:var(--ink2)}
+
+/* chart */
+.chart-wrap{position:relative}
+.tip{position:absolute;pointer-events:none;background:#0d0e12;border:1px solid var(--edge);padding:6px 9px;font:12px var(--mono);color:var(--ink);white-space:nowrap;display:none;transform:translate(-50%,-115%)}
+details{margin-top:8px}
+summary{cursor:pointer;color:var(--ink2);font-size:.88rem}
+
+/* photos */
+.ph{aspect-ratio:4/3;border:1px dashed var(--edge);display:flex;align-items:center;justify-content:center;color:var(--muted);font:12px var(--mono);text-align:center;padding:10px}
+
+footer{border-top:1px solid var(--edge);margin-top:70px;padding-top:18px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="kicker">PANDÉMONIUM VII · MONTRÉAL · NOV 7, 2026</div>
+  <h1>DÉJÀ <span>VU</span></h1>
+  <p>You've seen this before. A camera on my chest films the dancefloor; the screen below it plays
+  the party back to you — not now, but <b>seconds or minutes ago</b>, at random, interrupted by
+  subliminal flashes from films about time.</p>
+  <div class="privacy"><b>Nothing is ever recorded.</b> Memories live a few minutes in the
+  costume's RAM, are overwritten at random, and vanish for good when it's switched off.
+  Nothing is written to the SD card, nothing is uploaded, and the costume has no Wi-Fi or internet.</div>
+  <div class="meta">STATUS: WORK IN PROGRESS · LAST UPDATE 2026-10-20</div>
+  <nav class="toc">
+    <a href="#what">What you're seeing</a><a href="#cycle">The memory cycle</a>
+    <a href="#hud">The screen</a><a href="#hardware">Hardware</a><a href="#bom">Parts &amp; cost</a>
+    <a href="#software">Software</a><a href="#bitchat">Talk to it</a><a href="#journey">Build log</a>
+    <a href="#challenges">Challenges</a><a href="#numbers">Numbers</a><a href="#status">Status</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============================================================ -->
+<h2 id="what">What you're seeing</h2>
+<p class="lead">Déjà vu, made literal. The costume is a machine that hands you a memory you didn't know you had.</p>
+<div class="grid g3">
+  <div class="card"><span class="tag g">LIVE</span>
+    <h3>The present</h3><p>For 10 seconds the screen shows what the camera sees right now — and
+    quietly records it as a short clip into memory.</p></div>
+  <div class="card"><span class="tag a">RECALL</span>
+    <h3>The past</h3><p>Then it digs up three old clips at random — maybe from 20 seconds ago, maybe
+    from an hour ago — and loops each one for a random 1–15 s. You might catch yourself dancing
+    earlier tonight.</p></div>
+  <div class="card"><span class="tag r">GLITCH</span>
+    <h3>The flash</h3><p>Sometimes, at a cut, a quarter-second frame slips in: a still from a
+    silent film, or a line like <i>THERE IS NO SPOON</i> or <i>LIVE. DIE. REPEAT.</i> A glitch in
+    the Matrix.</p></div>
+</div>
+<p>The video is black &amp; white and filmed in <b>infrared</b>: two IR projectors light the
+crowd invisibly, so the camera sees in the dark of the club. Around the video, a sci-fi HUD shows
+the machine's "mind": its memory bank, the beat of the music, the people it tracks, and messages
+sent to it over Bluetooth. Three 7-segment displays echo the <i>Back to the Future</i> time
+circuits.</p>
+
+<!-- photos: replace the placeholders with <img src="img/....jpg" alt="..."> -->
+<div class="grid g3">
+  <div class="ph">[ photo: the costume, worn ]</div>
+  <div class="ph">[ photo: the screen in the dark ]</div>
+  <div class="ph">[ photo: the electronics ]</div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="cycle">The memory cycle</h2>
+<p class="lead">One endless loop: LIVE → RECALL × 3 → LIVE… A cycle lasts ~34 s on average.</p>
+<figure>
+<svg viewBox="0 0 940 300" role="img" aria-labelledby="cyc-t">
+  <title id="cyc-t">Cycle diagram: a 10-second LIVE phase records clip into one of 16 memory slots; then three RECALL phases each replay a random slot for 1 to 15 seconds; glitches may appear at each cut.</title>
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#7c7e8c"/></marker></defs>
+  <!-- timeline -->
+  <rect x="20" y="40" width="200" height="34" fill="#3cff64" opacity=".85"/>
+  <text x="120" y="62" text-anchor="middle" font-size="14" font-weight="700" fill="#111">LIVE 10 s</text>
+  <rect x="226" y="40" width="190" height="34" fill="#ffb340" opacity=".85"/>
+  <text x="321" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#111">RECALL #1 · 1–15 s</text>
+  <rect x="422" y="40" width="110" height="34" fill="#ffb340" opacity=".6"/>
+  <text x="477" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#111">RECALL #2</text>
+  <rect x="538" y="40" width="250" height="34" fill="#ffb340" opacity=".85"/>
+  <text x="663" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#111">RECALL #3</text>
+  <rect x="794" y="40" width="126" height="34" fill="#3cff64" opacity=".45"/>
+  <text x="857" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#111">LIVE …</text>
+  <!-- glitch marks -->
+  <g fill="#ff4a4a" font-size="18"><text x="217" y="32">⚡</text><text x="413" y="32">⚡</text><text x="529" y="32">⚡</text><text x="785" y="32">⚡</text></g>
+  <text x="20" y="22" font-size="11" fill="#a9abb8">possible glitch at every cut (15 %)</text>
+  <!-- bank -->
+  <text x="20" y="150" font-size="12" fill="#a9abb8">MEMORY BANK · 16 slots in PSRAM · ~0.65 MB per 10 s clip</text>
+  <g>
+    <rect x="20"  y="162" width="48" height="40" fill="#2E2F39" stroke="#3ad7f0"/><text x="44" y="187" text-anchor="middle" font-size="11" fill="#3ad7f0">01</text>
+    <rect x="74"  y="162" width="48" height="40" fill="#2E2F39" stroke="#3ad7f0"/><text x="98" y="187" text-anchor="middle" font-size="11" fill="#3ad7f0">02</text>
+    <rect x="128" y="162" width="48" height="40" fill="#3cff64" fill-opacity=".2" stroke="#3cff64" stroke-width="2"/><text x="152" y="187" text-anchor="middle" font-size="11" fill="#3cff64">REC</text>
+    <rect x="182" y="162" width="48" height="40" fill="#2E2F39" stroke="#3ad7f0"/><text x="206" y="187" text-anchor="middle" font-size="11" fill="#3ad7f0">04</text>
+    <rect x="236" y="162" width="48" height="40" fill="#ffb340" fill-opacity=".2" stroke="#ffb340" stroke-width="2"/><text x="260" y="187" text-anchor="middle" font-size="11" fill="#ffb340">PLAY</text>
+    <rect x="290" y="162" width="48" height="40" fill="#2E2F39" stroke="#3ad7f0"/><text x="314" y="187" text-anchor="middle" font-size="11" fill="#3ad7f0">06</text>
+    <rect x="344" y="162" width="48" height="40" fill="#2E2F39" stroke="#3ad7f0"/><text x="368" y="187" text-anchor="middle" font-size="11" fill="#3ad7f0">07</text>
+    <rect x="398" y="162" width="48" height="40" fill="#2E2F39" stroke="#3ad7f0"/><text x="422" y="187" text-anchor="middle" font-size="11" fill="#3ad7f0">08</text>
+    <text x="470" y="187" font-size="13" fill="#7c7e8c">… 16</text>
+  </g>
+  <path d="M120 78 C120 120 152 120 152 158" stroke="#3cff64" stroke-width="1.5" fill="none" marker-end="url(#ar)"/>
+  <path d="M260 160 C260 120 321 120 321 80" stroke="#ffb340" stroke-width="1.5" fill="none" marker-end="url(#ar)"/>
+  <text x="20" y="236" font-size="12" fill="#e8e9ee">Bank full? A RANDOM old slot is overwritten — not the oldest.</text>
+  <text x="20" y="256" font-size="12" fill="#a9abb8">So memories have unpredictable ages: most are minutes old, a few survive for much longer.</text>
+  <text x="20" y="276" font-size="12" fill="#a9abb8">The camera never stops (auto-exposure stays settled); during RECALL its frames are simply dropped.</text>
+</svg>
+<figcaption>Durations of the three RECALLs are drawn at the start of each LIVE, so the HUD can show the whole cycle in advance.</figcaption>
+</figure>
+
+<p>Why a cycle, instead of a simple constant delay? The first prototype did exactly that — a
+continuous 15-second delay — but the chip can't encode and decode video at the same time
+(see <a href="#challenges">challenges</a>). The cycle turned that constraint into the aesthetic:
+déjà vu doesn't come smoothly, it comes in jolts.</p>
+
+<!-- ============================================================ -->
+<h2 id="hud">The screen</h2>
+<p class="lead">7″ · 1024×600 · every widget is drawn live by the microcontroller.</p>
+<figure>
+<svg viewBox="0 0 1024 600" role="img" aria-labelledby="hud-t" style="background:#0d0e12">
+  <title id="hud-t">Map of the 1024 by 600 screen: video in the centre, events on the left, memory bank, system and microphone pages and a 3D object on the right, beat and memory tape on top, cycle bar and bitchat status at the bottom.</title>
+  <g fill="#2E2F39" stroke="#474956">
+    <rect x="8" y="8" width="112" height="44"/><rect x="128" y="8" width="654" height="44"/>
+    <rect x="8" y="60" width="112" height="494"/><rect x="128" y="60" width="654" height="494"/>
+    <rect x="790" y="8" width="224" height="204"/><rect x="790" y="220" width="224" height="126"/>
+    <rect x="790" y="354" width="224" height="22"/><rect x="790" y="384" width="224" height="170"/>
+    <rect x="8" y="562" width="112" height="30"/><rect x="128" y="562" width="654" height="30"/>
+    <rect x="790" y="562" width="224" height="30"/>
+  </g>
+  <rect x="135" y="67" width="640" height="480" fill="#3a3b44"/>
+  <g fill="none" stroke="#e8e9ee" stroke-width="2" opacity=".7">
+    <path d="M150 82h24M150 82v24M760 82h-24M760 82v24M150 532h24M150 532v-24M760 532h-24M760 532v-24"/>
+  </g>
+  <g font-size="15" fill="#e8e9ee">
+    <text x="455" y="300" text-anchor="middle" font-size="22">VIDEO 640×480</text>
+    <text x="455" y="326" text-anchor="middle" fill="#a9abb8">live or recalled · infrared · B&amp;W</text>
+    <text x="455" y="350" text-anchor="middle" fill="#a9abb8">+ chat bubbles · TERMINATOR targets</text>
+  </g>
+  <g font-size="12" fill="#3ad7f0">
+    <text x="16" y="28">BEAT</text><text x="16" y="44" fill="#a9abb8" font-size="10">BPM + kick</text>
+    <text x="136" y="28">MEMORY TAPE</text><text x="136" y="44" fill="#a9abb8" font-size="10">where each stored clip sits in time (log scale)</text>
+    <text x="16" y="80">EVENTS</text>
+    <text x="16" y="98" fill="#a9abb8" font-size="10">LIVE</text><text x="16" y="112" fill="#a9abb8" font-size="10">STORED</text>
+    <text x="16" y="126" fill="#a9abb8" font-size="10">RECALL</text><text x="16" y="140" fill="#a9abb8" font-size="10">GLITCH</text>
+    <text x="798" y="28">MEMORY BANK</text><text x="798" y="44" fill="#a9abb8" font-size="10">16 hex cells, age of each clip</text>
+    <text x="798" y="240">SYSTEM | MIC</text><text x="798" y="256" fill="#a9abb8" font-size="10">CPU, RAM, temp / waveform</text>
+    <text x="798" y="369" font-size="10" fill="#a9abb8">PAGE 1 · 2</text>
+    <text x="798" y="404">3D OBJECT</text><text x="798" y="420" fill="#a9abb8" font-size="10">55 wireframes, react to</text><text x="798" y="433" fill="#a9abb8" font-size="10">sound and kick drum</text>
+    <text x="16" y="581" font-size="11">CYCLE / UP</text>
+    <text x="136" y="581" font-size="11">CYCLE BAR — LIVE | RECALL #04 6S | …</text>
+    <text x="798" y="581" font-size="11">BITCHAT <tspan fill="#3cff64">ONLINE</tspan> #MESH</text>
+  </g>
+</svg>
+<figcaption>Colour code everywhere, including the 7-segment displays:
+<span class="g">green = live / recording</span>, <span class="a">amber = recall</span>,
+<span class="r">red = glitch</span>, <span class="c">cyan = stored memories</span>.</figcaption>
+</figure>
+
+<div class="grid g2">
+  <div class="card"><h3>TERMINATOR mode</h3><p>Motion detection on whatever is displayed — live or
+  memory. Moving blobs get red corner brackets with real measurements (velocity, size, tracking
+  time). Optional red or cyan filter. No face recognition: nobody is identified.</p></div>
+  <div class="card"><h3>Time circuits</h3><p>Three 7-segment displays, <i>Back to the Future</i>
+  style. <span class="r">Red</span> DESTINATION TIME flashes the year of the film behind each
+  glitch. <span class="g">Green</span> PRESENT shows <span class="mono">LIUE</span> + the slot being
+  recorded. <span class="a">Orange</span> LAST TIME DEPARTED shows the slot and age of the memory
+  being replayed.</p></div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="hardware">Hardware</h2>
+<p class="lead">One board does almost everything. Power comes from a single USB-C battery.</p>
+<figure>
+<svg viewBox="0 0 940 470" role="img" aria-labelledby="hw-t">
+  <title id="hw-t">Hardware block diagram: camera to ESP32-P4 via MIPI-CSI, P4 to 7-inch display via MIPI-DSI, onboard microphones via I2S, three TM1637 displays via GPIO, ESP32-C6 radio via UART, phones via Bluetooth LE, power bank via USB-C.</title>
+  <defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#a9abb8"/></marker></defs>
+  <!-- board outline -->
+  <rect x="250" y="40" width="420" height="330" fill="none" stroke="#474956" stroke-dasharray="5 4"/>
+  <text x="260" y="32" font-size="11" fill="#7c7e8c">WAVESHARE ESP32-P4-WIFI6-TOUCH-LCD-7B</text>
+  <!-- P4 -->
+  <rect x="270" y="80" width="230" height="200" fill="#2E2F39" stroke="#3ad7f0" stroke-width="1.5"/>
+  <text x="385" y="104" text-anchor="middle" font-size="15" fill="#3ad7f0" font-weight="700">ESP32-P4</text>
+  <g font-size="11" fill="#a9abb8">
+    <text x="284" y="128">2 × RISC-V 360 MHz</text>
+    <text x="284" y="146">32 MB PSRAM · 32 MB flash</text>
+    <text x="284" y="164">~300 KB usable internal RAM</text>
+    <text x="284" y="190" fill="#e8e9ee">H.264 encoder (hardware)</text>
+    <text x="284" y="208" fill="#e8e9ee">H.264 decoder (software)</text>
+    <text x="284" y="226" fill="#e8e9ee">LVGL HUD · beat detection</text>
+    <text x="284" y="244" fill="#e8e9ee">motion tracking · 3D renderer</text>
+    <text x="284" y="266">silicon rev 1.3</text>
+  </g>
+  <!-- C6 -->
+  <rect x="540" y="80" width="120" height="80" fill="#2E2F39" stroke="#ffb340"/>
+  <text x="600" y="104" text-anchor="middle" font-size="13" fill="#ffb340" font-weight="700">ESP32-C6</text>
+  <g font-size="10" fill="#a9abb8" text-anchor="middle"><text x="600" y="122">custom firmware</text><text x="600" y="136">BLE · NimBLE</text><text x="600" y="150">Noise · libsodium</text></g>
+  <path d="M538 120 H504" stroke="#ffb340" marker-end="url(#a2)"/><text x="520" y="114" font-size="9" fill="#a9abb8" text-anchor="middle">UART</text>
+  <!-- mic -->
+  <rect x="540" y="180" width="120" height="56" fill="#2E2F39" stroke="#474956"/>
+  <text x="600" y="202" text-anchor="middle" font-size="12" fill="#e8e9ee">ES7210</text><text x="600" y="220" text-anchor="middle" font-size="10" fill="#a9abb8">2 mics</text>
+  <path d="M538 208 H504" stroke="#a9abb8" marker-end="url(#a2)"/><text x="520" y="202" font-size="9" fill="#a9abb8" text-anchor="middle">I²S</text>
+  <!-- screen on board -->
+  <rect x="270" y="300" width="390" height="54" fill="#2E2F39" stroke="#474956"/>
+  <text x="465" y="324" text-anchor="middle" font-size="13" fill="#e8e9ee">7″ IPS 1024×600 + GT911 touch</text>
+  <text x="465" y="342" text-anchor="middle" font-size="10" fill="#a9abb8">EK79007 panel · MIPI-DSI</text>
+  <path d="M385 282 V296" stroke="#a9abb8" marker-end="url(#a2)"/>
+  <!-- camera -->
+  <rect x="20" y="80" width="190" height="110" fill="#2E2F39" stroke="#3cff64"/>
+  <text x="115" y="104" text-anchor="middle" font-size="13" fill="#3cff64" font-weight="700">CAMERA</text>
+  <g font-size="10" fill="#a9abb8"><text x="32" y="124">Arducam OV5647 NoIR 5 MP</text><text x="32" y="140">motorised IR-cut (locked open)</text><text x="32" y="156">2 × IR projectors ~850 nm</text><text x="32" y="172">3 photoresistors, capped</text></g>
+  <path d="M212 135 H266" stroke="#3cff64" marker-end="url(#a2)"/><text x="239" y="128" font-size="9" fill="#a9abb8" text-anchor="middle">MIPI-CSI</text><text x="239" y="150" font-size="9" fill="#a9abb8" text-anchor="middle">RAW8</text>
+  <!-- 7seg -->
+  <rect x="20" y="230" width="190" height="96" fill="#2E2F39" stroke="#474956"/>
+  <text x="115" y="252" text-anchor="middle" font-size="13" fill="#e8e9ee" font-weight="700">3 × TM1637</text>
+  <g font-size="11"><text x="34" y="274" fill="#ff4a4a">■ DESTINATION</text><text x="34" y="292" fill="#3cff64">■ PRESENT</text><text x="34" y="310" fill="#ffb340">■ LAST DEPARTED</text></g>
+  <path d="M266 240 H214" stroke="#a9abb8" marker-end="url(#a2)"/><text x="240" y="234" font-size="9" fill="#a9abb8" text-anchor="middle">GPIO 46–51</text>
+  <!-- phones -->
+  <rect x="720" y="70" width="200" height="100" fill="#2E2F39" stroke="#ffb340" stroke-dasharray="4 3"/>
+  <text x="820" y="96" text-anchor="middle" font-size="13" fill="#ffb340" font-weight="700">PHONES</text>
+  <g font-size="10" fill="#a9abb8" text-anchor="middle"><text x="820" y="116">bitchat app</text><text x="820" y="132">Bluetooth mesh, no internet</text><text x="820" y="148">public + encrypted DMs</text></g>
+  <path d="M716 128 H664" stroke="#ffb340" marker-end="url(#a2)"/><path d="M664 112 H714" stroke="#ffb340" marker-end="url(#a2)"/><text x="690" y="104" font-size="9" fill="#a9abb8" text-anchor="middle">BLE</text>
+  <!-- SD -->
+  <rect x="720" y="250" width="200" height="60" fill="#2E2F39" stroke="#474956"/>
+  <text x="820" y="274" text-anchor="middle" font-size="12" fill="#e8e9ee">microSD 128 GB</text><text x="820" y="292" text-anchor="middle" font-size="10" fill="#a9abb8">glitch images only — read-only</text>
+  <path d="M716 262 H504" stroke="#a9abb8" marker-end="url(#a2)" stroke-dasharray="3 3"/>
+  <!-- power -->
+  <rect x="270" y="400" width="390" height="54" fill="#2E2F39" stroke="#474956"/>
+  <text x="465" y="424" text-anchor="middle" font-size="13" fill="#e8e9ee">INIU 20 000 mAh power bank</text>
+  <text x="465" y="442" text-anchor="middle" font-size="10" fill="#a9abb8">USB-C · whole costume ≈ 4.4 W · ~14 h</text>
+  <path d="M465 398 V374" stroke="#a9abb8" marker-end="url(#a2)"/>
+</svg>
+</figure>
+
+<!-- ============================================================ -->
+<h2 id="bom">Parts &amp; cost</h2>
+<p class="lead">Approximate street prices (USD, October 2026). Prices move — treat as ballpark.</p>
+<div class="scroll"><table>
+<thead><tr><th>Part</th><th>Role</th><th class="num">≈ USD</th></tr></thead>
+<tbody>
+<tr><td>Waveshare <b>ESP32-P4-WIFI6-Touch-LCD-7B</b></td><td>The brain and the screen: ESP32-P4 + ESP32-C6, 7″ 1024×600 touch display, MIPI-CSI camera port, microSD slot, mics, USB-C power</td><td class="num">47–56</td></tr>
+<tr><td>Arducam <b>OV5647 NoIR</b>, motorised IR-cut + IR LED boards</td><td>Camera + infrared illumination in one piece (15-pin 1.0 mm CSI cable)</td><td class="num">32–35</td></tr>
+<tr><td><b>INIU</b> 20 000 mAh 45 W USB-C power bank</td><td>Powers everything for ~14 h</td><td class="num">20–37</td></tr>
+<tr><td>3 × <b>TM1637</b> 4-digit 7-segment modules (red, green, orange)</td><td>"Time circuits"</td><td class="num">6–12</td></tr>
+<tr><td>microSDXC 128 GB UHS</td><td>Glitch images (way more than needed)</td><td class="num">12–15</td></tr>
+<tr><td>USB-UART cable (CP2102N)</td><td>Flashing the ESP32-C6 radio chip</td><td class="num">≈ 8</td></tr>
+<tr><td>Spare 15-pin FFC camera cable, Dupont wires</td><td>Wiring</td><td class="num">≈ 8</td></tr>
+<tr><td>M2 nylon standoffs, adhesive velcro, short USB-C cables</td><td>Mounting</td><td class="num">≈ 15</td></tr>
+<tr><td>3 opaque caps</td><td>Lock the camera in night mode (see challenges)</td><td class="num">≈ 0</td></tr>
+</tbody>
+<tfoot><tr><th colspan="2">Electronics total (excluding the costume itself)</th><th class="num">≈ 150–185</th></tr></tfoot>
+</table></div>
+
+<!-- ============================================================ -->
+<h2 id="software">Software</h2>
+<p class="lead">ESP-IDF 5.5 in C, no Arduino. ~10 000 lines on the P4, ~1 500 on the C6.</p>
+<figure>
+<svg viewBox="0 0 940 360" role="img" aria-labelledby="sw-t">
+  <title id="sw-t">Software pipeline: capture, 2x2 binning, overlay, then either H.264 encode into the memory bank during LIVE, or decode from the bank during RECALL, then display through LVGL with the HUD.</title>
+  <defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#a9abb8"/></marker></defs>
+  <g transform="translate(0,30)">
+  <g font-size="11">
+    <rect x="10" y="40" width="120" height="56" fill="#2E2F39" stroke="#474956"/><text x="70" y="64" text-anchor="middle" fill="#e8e9ee">Sensor</text><text x="70" y="80" text-anchor="middle" fill="#a9abb8" font-size="10">RAW8 Bayer 1280×960</text>
+    <rect x="160" y="40" width="130" height="56" fill="#2E2F39" stroke="#474956"/><text x="225" y="64" text-anchor="middle" fill="#e8e9ee">2×2 average</text><text x="225" y="80" text-anchor="middle" fill="#a9abb8" font-size="10">640×480 grey, no ISP</text>
+    <rect x="320" y="10" width="160" height="56" fill="#2E2F39" stroke="#3cff64"/><text x="400" y="34" text-anchor="middle" fill="#3cff64">H.264 encode (HW)</text><text x="400" y="50" text-anchor="middle" fill="#a9abb8" font-size="10">10 fps · 0.8 Mbit/s</text>
+    <rect x="320" y="110" width="160" height="56" fill="#2E2F39" stroke="#ffb340"/><text x="400" y="134" text-anchor="middle" fill="#ffb340">H.264 decode (SW)</text><text x="400" y="150" text-anchor="middle" fill="#a9abb8" font-size="10">on a scratch copy</text>
+    <rect x="520" y="60" width="140" height="56" fill="#2E2F39" stroke="#3ad7f0"/><text x="590" y="84" text-anchor="middle" fill="#3ad7f0">Memory bank</text><text x="590" y="100" text-anchor="middle" fill="#a9abb8" font-size="10">16 clips · PSRAM</text>
+    <rect x="700" y="40" width="230" height="96" fill="#2E2F39" stroke="#474956"/><text x="815" y="64" text-anchor="middle" fill="#e8e9ee">Frame → screen</text><text x="815" y="82" text-anchor="middle" fill="#a9abb8" font-size="10">HUD overlay pre-blended per pixel</text><text x="815" y="98" text-anchor="middle" fill="#a9abb8" font-size="10">colour filter via lookup table</text><text x="815" y="114" text-anchor="middle" fill="#a9abb8" font-size="10">→ LVGL canvas → DSI</text>
+  </g>
+  <g stroke="#a9abb8" fill="none">
+    <path d="M132 68 H156" marker-end="url(#a3)"/><path d="M292 60 H316" marker-end="url(#a3)"/>
+    <path d="M482 38 C510 38 510 75 516 78" marker-end="url(#a3)"/><path d="M520 100 C500 130 500 138 484 138" marker-end="url(#a3)"/>
+    <path d="M225 38 V-4 H815 V34" stroke-dasharray="3 3" marker-end="url(#a3)"/><path d="M482 150 C640 160 680 120 696 110" marker-end="url(#a3)"/>
+  </g>
+  <text x="520" y="-10" font-size="10" fill="#7c7e8c">LIVE: every frame shown, 1 in ~1.4 encoded</text>
+  <!-- cores -->
+  <text x="10" y="210" font-size="12" fill="#a9abb8">TASKS ON THE TWO CORES</text>
+  <rect x="10" y="222" width="450" height="96" fill="#2E2F39" stroke="#474956"/>
+  <text x="22" y="244" font-size="12" fill="#3ad7f0">CORE 0</text>
+  <g font-size="10" fill="#e8e9ee"><text x="22" y="264">LVGL / HUD rendering · touch</text><text x="22" y="280">3D wireframe renderer (own task, double buffer)</text><text x="22" y="296">motion tracking · 7-segment animation</text><text x="22" y="312">audio: beat &amp; tempo detection</text></g>
+  <rect x="480" y="222" width="450" height="96" fill="#2E2F39" stroke="#474956"/>
+  <text x="492" y="244" font-size="12" fill="#3ad7f0">CORE 1</text>
+  <g font-size="10" fill="#e8e9ee"><text x="492" y="264">camera state machine (LIVE / RECALL)</text><text x="492" y="280">capture, binning, overlay blend in a single pass</text><text x="492" y="296">H.264 encode or decode — never both at once</text><text x="492" y="312">bitchat link (UART from the C6)</text></g>
+  </g>
+</svg>
+</figure>
+<p>Main building blocks: <code>esp_video</code> (V4L2-style camera capture), <code>esp_h264</code>,
+<code>esp_lcd</code> + <b>LVGL</b> for the HUD, <code>esp_codec_dev</code> for the microphones,
+<b>NimBLE</b> + <b>libsodium</b> on the C6. Custom code: the LIVE/RECALL state machine and memory
+bank, the HUD widgets, the beat detector, the motion tracker, a wireframe 3D renderer with
+anti-aliased lines, and a from-scratch bitchat peer.</p>
+
+<!-- ============================================================ -->
+<h2 id="bitchat">Talk to the costume</h2>
+<div class="card">
+<p style="margin-top:0">The costume is a peer on <a href="https://bitchat.free/">bitchat</a>, the
+Bluetooth mesh messenger that works with no internet and no account. Install it, stay close, and
+look for <b class="mono">MORDREAD_COSTUME</b>.</p>
+<ul>
+<li>Messages in the public <b>#mesh</b> channel appear in cyan bubbles on the screen, with your nickname.</li>
+<li>Private messages are end-to-end encrypted (Noise XX) — the costume decrypts them itself and
+shows them in amber. It can't chat back; it'll auto-reply once to say so.</li>
+<li>Be nice: what you write is shown to the whole dancefloor. Nothing is stored.</li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="journey">Build log</h2>
+<p class="lead">From unboxing to party, in milestones that each had to work before the next.</p>
+<div class="tl">
+  <div class="ev"><div class="date">2026-09-09 → 09-10</div><h3>Toolchain &amp; first light</h3>
+    <p>ESP-IDF pinned to the exact version of the board vendor. The chip turns out to be revision
+    1.3 while every vendor example targets 3.x — every build needs a different config profile.
+    Factory firmware flashed, live camera on screen.</p></div>
+  <div class="ev"><div class="date">2026-09-11</div><h3>The 15-second delay</h3>
+    <p>First working déjà vu: grey RAW frames, hardware-JPEG-compressed into a ring buffer in
+    PSRAM, replayed exactly 15 s late. Face detection with boxes re-aligned on the <i>delayed</i>
+    frame. A memory audit, an infrared filter that froze the image, and a dozen dead ends
+    (colour, YUV, hardware scaling) along the way.</p></div>
+  <div class="ev pivot"><div class="date">2026-09-14 → 09-15</div><h3>Reset &amp; the H.264 pivot</h3>
+    <p>Firmware restarted from a minimal base, split into components. A throwaway proof of concept
+    showed H.264 would hold far more video in the same memory — but that encoder and decoder
+    can't coexist. Result: the LIVE/RECALL cycle and the random memory bank.</p></div>
+  <div class="ev"><div class="date">2026-09-30 → 10-02</div><h3>The HUD</h3>
+    <p>Telemetry column, picked from full-size animated HTML mock-ups. HUD frame redesigned three
+    times; its cost on the video cut by baking it into a per-pixel table (10.7 → 15.8 fps).
+    Wireframe 3D objects, beat detection, a brightness panel, subliminal words, the first
+    7-segment displays.</p></div>
+  <div class="ev"><div class="date">2026-10-04 → 10-05</div><h3>Wider, sharper, real-time</h3>
+    <p>Custom sensor window: the full 5 MP field of view instead of a narrow centre crop.
+    Clips at 10 fps so recalls play at real speed. Red DESTINATION TIME display. Night mode locked
+    with three caps.</p></div>
+  <div class="ev"><div class="date">2026-10-05 → 10-07</div><h3>bitchat &amp; TERMINATOR</h3>
+    <p>Factory radio firmware backed up, replaced by a standalone bitchat peer on the ESP32-C6,
+    then encrypted private messages. Motion tracking mode, a faster 3D renderer, HUD
+    refresh.</p></div>
+  <div class="ev"><div class="date">2026-10-09 → 10-10</div><h3>Endurance test</h3>
+    <p>Everything at max brightness, all options on: 12 h 56 on battery, 10 % left.</p></div>
+  <div class="ev pivot"><div class="date">2026-11-07</div><h3>Party</h3><p>Pandémonium VII, Montréal.</p></div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="challenges">Challenges &amp; solutions</h2>
+<p class="lead">Most of the work was here. Each one was diagnosed at the source before fixing.</p>
+<div class="grid g2 ch">
+  <div class="card"><h3>Night vision can't be software-controlled</h3>
+    <p>The camera's IR-cut filter and IR projectors switch on light sensors. The board's camera
+    connector exposes the control pins — wired to nothing on this board (checked on the schematic).</p>
+    <p class="sol">Three opaque caps on the three photoresistors: permanently in night mode, zero code.</p></div>
+  <div class="card"><h3>Raw video doesn't fit</h3>
+    <p>15 s of uncompressed frames ≈ 230 MB, for 32 MB of PSRAM.</p>
+    <p class="sol">JPEG first (~50 KB/frame), then hardware H.264: 16 ten-second clips in ~10 MB.</p></div>
+  <div class="card"><h3>Encoder and decoder fight for RAM</h3>
+    <p>The hardware encoder's reference frame must live in the ~300 KB of internal RAM. With the
+    software decoder open too, memory got corrupted and the decoder crashed.</p>
+    <p class="sol">Never open both: alternate LIVE (encode) and RECALL (decode). The constraint became the concept.</p></div>
+  <div class="card"><h3>The decoder rewrites its input</h3>
+    <p>Each replay of a clip had more errors than the last. CRCs proved the bundled decoder edits
+    its input buffer in place — undocumented.</p>
+    <p class="sol">Decode from a scratch copy; the memory bank is never handed to the decoder.</p></div>
+  <div class="card"><h3>Colour is a trap on this silicon</h3>
+    <p>Sensor flips scramble the Bayer pattern, the ISP's YUV output was corrupt, and the encoder
+    only accepts one input format on rev 1.3.</p>
+    <p class="sol">Embrace monochrome: raw sensor data, averaged 2×2, no ISP at all. Infrared is grey anyway.</p></div>
+  <div class="card"><h3>A narrow field of view</h3>
+    <p>The driver's only working RAW mode read a small centre crop (~70°).</p>
+    <p class="sol">Clone that mode's register set and change only the window: full sensor, 1280×960, binned to 640×480.</p></div>
+  <div class="card"><h3>The pretty HUD cost 30 % of the frame rate</h3>
+    <p>A semi-transparent full-screen frame over the video was re-blended by the GUI library on every frame.</p>
+    <p class="sol">Cut it into opaque borders + a per-pixel table applied during the grey conversion: 10.7 → 15.8 fps, same look.</p></div>
+  <div class="card"><h3>A silent microphone</h3>
+    <p>Peaks at −55 dBFS even when shouting. A bug in the codec driver silently reset the gain to 0 dB.</p>
+    <p class="sol">Re-apply the gain after opening the device (+29 dB). Beat detection then worked first try.</p></div>
+  <div class="card"><h3>Upside down, mirrored, untouchable</h3>
+    <p>The panel is mounted at 180°, the touch layer wasn't rotated with it, and the touch chip
+    sometimes didn't answer at boot (the vendor code then rebooted the board).</p>
+    <p class="sol">Own display init: retry the touch chip, boot without it if needed, fix the mirroring.</p></div>
+  <div class="card"><h3>Talking bitchat from a microcontroller</h3>
+    <p>No library: the protocol was read from the app's source. iOS dropped the link every 30 s,
+    then private messages needed a full Noise XX handshake.</p>
+    <p class="sol">GATT server added, Noise XX + ChaCha20-Poly1305 with libsodium, delivery receipts so phones stop resending.</p></div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="numbers">Numbers</h2>
+<div class="stats">
+  <div class="stat"><div class="v">12–15</div><div class="l">fps on screen, live</div></div>
+  <div class="stat"><div class="v">10</div><div class="l">fps recorded &amp; recalled (real speed)</div></div>
+  <div class="stat"><div class="v">16</div><div class="l">memories in the bank</div></div>
+  <div class="stat"><div class="v">~4.4 W</div><div class="l">whole costume, all at max</div></div>
+  <div class="stat"><div class="v">~14 h</div><div class="l">estimated on a full charge</div></div>
+  <div class="stat"><div class="v">55</div><div class="l">3D wireframe objects</div></div>
+</div>
+
+<h3 style="margin-top:28px">Battery endurance test — everything at maximum</h3>
+<p class="lead" style="font-size:.9rem">Battery level vs. cumulative run time. Paused overnight at 9 h 03 (35 %), resumed without recharging.</p>
+<div class="chart-wrap" id="bat"><svg viewBox="0 0 900 300" role="img" aria-label="Battery percentage over 12 hours 56 minutes, falling steadily from 100 to 10 percent at about 7 percent per hour."></svg><div class="tip"></div></div>
+<details><summary>Data table</summary><div class="scroll"><table id="battab"><thead><tr><th>Run time</th><th class="num">Battery</th></tr></thead><tbody></tbody></table></div></details>
+
+<!-- ============================================================ -->
+<h2 id="status">Status</h2>
+<div class="grid g2">
+  <div class="card"><h3 class="g">Done</h3><ul style="margin:0;padding-left:18px">
+    <li>LIVE/RECALL cycle, random memory bank, full field of view</li>
+    <li>HUD: memory bank &amp; tape, events, system, mic, beat, 3D objects</li>
+    <li>Glitches: silent-film stills + 33 film quotes, film year on the red display</li>
+    <li>TERMINATOR motion tracking + filters</li>
+    <li>bitchat: public &amp; encrypted private messages, owner commands</li>
+    <li>Night mode lock, 12 h+ battery test</li></ul></div>
+  <div class="card"><h3 class="a">Next</h3><ul style="margin:0;padding-left:18px">
+    <li>Mechanical integration: mount, harness, cable routing, ventilation for the IR projectors</li>
+    <li>Long worn test (heat, movement, crowd)</li>
+    <li>Maybe: end-of-night summary screen, more remote commands, auto screen brightness</li></ul></div>
+</div>
+<p class="m" style="font-size:.9rem">Deliberately dropped: face recognition (too heavy, and nobody
+should be identified), saving clips to the SD card (memories must stay ephemeral), strobe effects
+(photosensitive safety — all blinking stays under 3 Hz).</p>
+
+<footer>
+  <p>Glitch images: public-domain silent and early films (<i>A Trip to the Moon</i>, <i>Nosferatu</i>,
+  <i>The Cabinet of Dr. Caligari</i>, <i>The General</i>, <i>Faust</i>, <i>The Phantom of the Opera</i>,
+  <i>Night of the Living Dead</i>…). Quotes from films about time, for a one-night art piece.</p>
+  <p>Built on the Waveshare ESP32-P4 BSP, Espressif ESP-IDF, LVGL, NimBLE, libsodium; bitchat by
+  permissionless tech. Developed with Claude Code.</p>
+  <p>DÉJÀ VU · Pandémonium VII · Montréal 2026</p>
+</footer>
+</main>
+
+<script>
+// Battery endurance chart (data: docs/ENDURANCE.md), single series, hover tooltip.
+(function(){
+  const d=[[0,100],[.433,98],[.867,95],[1.783,88],[2.167,85],[3.783,74],[4.267,71],[5.3,64],[5.883,60],
+    [6.55,54],[7.417,48],[7.783,45],[8.333,41],[8.883,37],[9.05,35],[9.8,31],[12.65,11],[12.933,10]];
+  const W=900,H=300,L=48,R=20,T=16,B=40,xm=14;
+  const x=h=>L+h/xm*(W-L-R), y=p=>T+(100-p)/100*(H-T-B);
+  const fmt=h=>{const m=Math.round(h*60);return Math.floor(m/60)+' h '+String(m%60).padStart(2,'0')};
+  const wrap=document.getElementById('bat'),svg=wrap.querySelector('svg'),tip=wrap.querySelector('.tip');
+  let s='';
+  for(let p=0;p<=100;p+=25) s+=`<line x1="${L}" x2="${W-R}" y1="${y(p)}" y2="${y(p)}" stroke="#2e2f39"/><text x="${L-8}" y="${y(p)+4}" text-anchor="end" font-size="11" fill="#7c7e8c">${p} %</text>`;
+  for(let h=0;h<=14;h+=2) s+=`<text x="${x(h)}" y="${H-B+20}" text-anchor="middle" font-size="11" fill="#7c7e8c">${h} h</text>`;
+  s+=`<line x1="${x(12)}" x2="${x(12)}" y1="${T}" y2="${H-B}" stroke="#474956" stroke-dasharray="4 4"/><text x="${x(12)-6}" y="${T+12}" text-anchor="end" font-size="11" fill="#a9abb8">12 h goal</text>`;
+  s+=`<line x1="${x(9.05)}" x2="${x(9.05)}" y1="${y(35)+8}" y2="${H-B}" stroke="#474956"/><text x="${x(9.05)+6}" y="${H-B-8}" font-size="11" fill="#7c7e8c">overnight pause</text>`;
+  s+=`<path d="M${d.map(p=>x(p[0])+' '+y(p[1])).join('L')}" fill="none" stroke="#1aa3bd" stroke-width="2" stroke-linejoin="round"/>`;
+  s+=d.map(p=>`<circle cx="${x(p[0])}" cy="${y(p[1])}" r="4" fill="#1aa3bd" stroke="#14151b" stroke-width="2"/>`).join('');
+  s+=`<text x="${x(12.933)}" y="${y(10)-48}" text-anchor="end" font-size="11" fill="#e8e9ee">10 % left at 12 h 56</text>`;
+  s+=`<line id="cx" y1="${T}" y2="${H-B}" stroke="#a9abb8" opacity="0"/><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" id="hit"/>`;
+  svg.innerHTML=s;
+  const cx=svg.querySelector('#cx'),hit=svg.querySelector('#hit');
+  hit.addEventListener('pointermove',e=>{
+    const r=svg.getBoundingClientRect(),hx=(e.clientX-r.left)/r.width*W;
+    const p=d.reduce((a,b)=>Math.abs(x(b[0])-hx)<Math.abs(x(a[0])-hx)?b:a);
+    cx.setAttribute('x1',x(p[0]));cx.setAttribute('x2',x(p[0]));cx.setAttribute('opacity','.6');
+    tip.style.display='block';tip.style.left=(x(p[0])/W*r.width)+'px';tip.style.top=(y(p[1])/H*r.height)+'px';
+    tip.textContent=fmt(p[0])+' · '+p[1]+' %';
+  });
+  hit.addEventListener('pointerleave',()=>{tip.style.display='none';cx.setAttribute('opacity','0')});
+  document.querySelector('#battab tbody').innerHTML=d.map(p=>`<tr><td>${fmt(p[0])}</td><td class="num">${p[1]} %</td></tr>`).join('');
+})();
+</script>
+</body>
+</html>
