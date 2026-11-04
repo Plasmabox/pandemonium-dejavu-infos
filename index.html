@@ -136,13 +136,13 @@ footer{border-top:1px solid var(--edge);margin-top:70px;padding-top:18px;color:v
   <div class="meta">STATUS: WORK IN PROGRESS · LAST UPDATE 2026-11-04</div>
   <nav class="toc">
     <a href="#what">What you're seeing</a><a href="#cycle">The memory cycle</a>
-    <a href="#hud">The screen</a><a href="#glitch-images">Glitches</a><a href="#hardware">Hardware</a><a href="#bom">Parts &amp; cost</a>
+    <a href="#hud">The screen</a><a href="#panel">Control panel</a><a href="#glitch-images">Glitches</a><a href="#hardware">Hardware</a><a href="#bom">Parts &amp; cost</a>
     <a href="#software">Software</a><a href="#bitchat">Talk to it</a><a href="#journey">Build log</a><a href="#effort">The work</a>
     <a href="#challenges">Challenges</a><a href="#numbers">Numbers</a><a href="#status">Status</a>
   </nav>
 </header>
 
-<nav class="float" aria-label="Sections"><div class="in"><a href="#top">↑</a><a href="#what">Seeing</a><a href="#cycle">Cycle</a><a href="#hud">Screen</a><a href="#glitch-images">Images</a><a href="#glitch-quotes">Quotes</a><a href="#hardware">Hardware</a><a href="#bom">Parts</a><a href="#software">Software</a><a href="#bitchat">Talk to it</a><a href="#journey">Build log</a><a href="#effort">The work</a><a href="#challenges">Challenges</a><a href="#numbers">Numbers</a><a href="#status">Status</a></div><div class="bar"></div></nav>
+<nav class="float" aria-label="Sections"><div class="in"><a href="#top">↑</a><a href="#what">Seeing</a><a href="#cycle">Cycle</a><a href="#hud">Screen</a><a href="#panel">Panel</a><a href="#glitch-images">Images</a><a href="#glitch-quotes">Quotes</a><a href="#hardware">Hardware</a><a href="#bom">Parts</a><a href="#software">Software</a><a href="#bitchat">Talk to it</a><a href="#journey">Build log</a><a href="#effort">The work</a><a href="#challenges">Challenges</a><a href="#numbers">Numbers</a><a href="#status">Status</a></div><div class="bar"></div></nav>
 <main>
 
 <!-- ============================================================ -->
@@ -275,6 +275,59 @@ déjà vu doesn't come smoothly, it comes in jolts.</p>
   recorded. <span class="a">Orange</span> LAST TIME DEPARTED shows the slot and age of the memory
   being replayed.</p></div>
 </div>
+
+<h2 id="panel">The control panel</h2>
+<p class="lead">A long press anywhere on the screen opens it over the video. A long press, not a tap, so people
+touching the screen at the party can't change anything by accident. Tap outside to close it; it also closes
+after 4 s of inactivity. Every setting survives a reboot (stored in flash when the panel closes).</p>
+<figure>
+<svg viewBox="0 0 440 438" role="img" aria-labelledby="panel-t" style="max-width:440px;background:#0d0e12">
+  <title id="panel-t">The control panel: five sliders (screen brightness, displays brightness, mic sensitivity, kick sensitivity, glitch frequency), then TERMINATOR MODE, FILTER and a RED/CYAN button, then BITCHAT LOG and a CLEAR CHAT button.</title>
+  <rect x=".5" y=".5" width="439" height="437" fill="#2E2F39" fill-opacity=".92" stroke="#22E5FF"/>
+  <g font-size="13" fill="#A9ADBC">
+    <text x="14" y="32">SCREEN BRIGHTNESS</text><text x="14" y="94">DISPLAYS BRIGHTNESS</text>
+    <text x="14" y="156">MIC SENSITIVITY</text><text x="14" y="218">KICK SENSITIVITY</text>
+    <text x="14" y="280">GLITCH FREQUENCY  ~1.1/MIN</text>
+  </g>
+  <g font-size="20" font-weight="700" fill="#22E5FF" text-anchor="end">
+    <text x="426" y="34">100%</text><text x="426" y="96">8/8</text><text x="426" y="158">+12 dB</text>
+    <text x="426" y="220">5</text><text x="426" y="282">15%</text>
+  </g>
+  <g fill="#22E5FF">
+    <rect x="24" y="52" width="392" height="10" fill-opacity=".2"/><rect x="24" y="52" width="392" height="10"/>
+    <rect x="24" y="114" width="392" height="10" fill-opacity=".2"/><rect x="24" y="114" width="392" height="10"/>
+    <rect x="24" y="176" width="392" height="10" fill-opacity=".2"/><rect x="24" y="176" width="196" height="10"/>
+    <rect x="24" y="238" width="392" height="10" fill-opacity=".2"/><rect x="24" y="238" width="196" height="10"/>
+    <rect x="24" y="300" width="392" height="10" fill-opacity=".2"/><rect x="24" y="300" width="59" height="10"/>
+  </g>
+  <g fill="#EDEFF5"><rect x="408" y="49" width="16" height="16" rx="2"/><rect x="408" y="111" width="16" height="16" rx="2"/>
+    <rect x="212" y="173" width="16" height="16" rx="2"/><rect x="212" y="235" width="16" height="16" rx="2"/><rect x="75" y="297" width="16" height="16" rx="2"/></g>
+  <g font-size="13" fill="#EDEFF5">
+    <rect x="14" y="330" width="16" height="16" fill="none" stroke="#22E5FF"/><text x="38" y="343">TERMINATOR MODE</text>
+    <rect x="210" y="330" width="16" height="16" fill="#22E5FF"/><text x="234" y="343">FILTER</text>
+    <rect x="346" y="326" width="80" height="26" fill="none" stroke="#22E5FF"/><text x="386" y="344" text-anchor="middle">RED</text>
+    <rect x="14" y="368" width="16" height="16" fill="#22E5FF"/><text x="38" y="381">BITCHAT LOG</text>
+    <rect x="286" y="364" width="140" height="26" fill="none" stroke="#22E5FF"/><text x="356" y="382" text-anchor="middle">CLEAR CHAT</text>
+  </g>
+  <text x="220" y="424" font-size="11" fill="#6C7080" text-anchor="middle">LONG PRESS: OPEN  |  BOOT BUTTON: NEXT STEP</text>
+</svg>
+<figcaption>The panel as it appears over the video, with the default values.</figcaption>
+</figure>
+
+<div class="scroll"><table>
+<thead><tr><th>Control</th><th>Range (default)</th><th>What it changes</th></tr></thead>
+<tbody>
+<tr><td><b>SCREEN BRIGHTNESS</b></td><td>10–100 % (100 %)</td><td>Backlight of the 7″ screen. The biggest lever on battery life, and on how much the chest glows in a dark room. Floor at 10 % so the screen can never go black by mistake.</td></tr>
+<tr><td><b>DISPLAYS BRIGHTNESS</b></td><td>8 steps (8/8)</td><td>The three 7-segment time circuits. The green one always sits 4 steps lower: the eye is more sensitive to green.</td></tr>
+<tr><td><b>MIC SENSITIVITY</b></td><td>−12 … +36 dB (+12 dB)</td><td>A gain added to the measured sound level, once, before everything that listens: how much the 3D object swells and spins, the waveform and the VU meter on the MIC page. Lower it next to the speakers, raise it in a quiet corner.</td></tr>
+<tr><td><b>KICK SENSITIVITY</b></td><td>0–10 (5)</td><td>How easily a bass hit counts as a kick drum (minimum rise of the bass energy, and how far above its average). Drives the BPM, the kick bar of BEAT, the punch of the 3D object and its four corner lights. Too high: false kicks on bass lines; too low: missed kicks.</td></tr>
+<tr><td><b>GLITCH FREQUENCY</b></td><td>0–100 % by 5 (15 %)</td><td>Chance that a cut in the memory cycle flashes a glitch (a film still or a quote, 250 ms, with its year on the red display). The title shows the resulting average rate: 15 % ≈ 1.1 glitch per minute. 0 % turns glitches off.</td></tr>
+<tr><td><b>TERMINATOR MODE</b></td><td>on / off (off)</td><td>Motion detection on whatever is displayed, with targeting brackets and measurements over the video. Costs a little CPU; no face recognition.</td></tr>
+<tr><td><b>FILTER</b> + <b>RED | CYAN</b></td><td>on / off (on), red / cyan (red)</td><td>Only in TERMINATOR mode: tints the video red or cyan (the brackets follow the same colour). Free: it's a second grey-to-colour lookup table.</td></tr>
+<tr><td><b>BITCHAT LOG</b></td><td>on / off (on)</td><td>Shows or hides the chat messages over the video. Hidden messages are still received and logged.</td></tr>
+<tr><td><b>CLEAR CHAT</b></td><td>button</td><td>Wipes the notification and the bubbles on screen, same as the owner's private <span class="mono">!clear_log</span> command.</td></tr>
+</tbody></table></div>
+<p>Backup if the touch screen fails to start: the board's <b>BOOT</b> button steps the screen brightness through 100 / 70 / 45 / 25 / 10 % and shows the panel.</p>
 
 <h2 id="glitch-images">Glitch images</h2>
 <p class="lead">26 stills from films about time, on the SD card. At a cut, one of them may flash
