@@ -68,6 +68,20 @@ header.hero{min-height:min(88vh,760px);display:flex;flex-direction:column;justif
 nav.toc{font-family:var(--mono);font-size:.85rem;display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:26px}
 nav.toc a{color:var(--ink2);text-decoration:none;border-bottom:1px dotted var(--edge)}
 
+/* floating section menu */
+nav.float{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(20,21,27,.92);backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--edge);transform:translateY(-100%);transition:transform .25s}
+nav.float.on{transform:none}
+nav.float .in{max-width:980px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:0 12px}
+nav.float .in::-webkit-scrollbar{display:none}
+nav.float a{flex:none;font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  text-decoration:none;padding:12px 8px 10px;border-bottom:2px solid transparent}
+nav.float a:hover{color:var(--ink)}
+nav.float a.act{color:var(--cyan);border-bottom-color:var(--cyan)}
+nav.float .bar{position:absolute;left:0;bottom:-1px;height:1px;background:var(--cyan);width:0}
+h2[id]{scroll-margin-top:56px}
+@media (prefers-reduced-motion:reduce){nav.float{transition:none}}
+
 /* timeline */
 .tl{border-left:2px solid var(--edge);margin:18px 0 0 6px;padding-left:20px}
 .tl .ev{position:relative;margin-bottom:18px}
@@ -103,7 +117,7 @@ footer{border-top:1px solid var(--edge);margin-top:70px;padding-top:18px;color:v
 </head>
 <body>
 
-<header class="hero">
+<header class="hero" id="top">
   <div class="kicker">PANDÉMONIUM VII · MONTRÉAL · NOV 7, 2026</div>
   <h1>DÉJÀ <span>VU</span></h1>
   <p>You've seen this before. A camera on my chest films the dancefloor; the screen below it plays
@@ -129,6 +143,7 @@ footer{border-top:1px solid var(--edge);margin-top:70px;padding-top:18px;color:v
   </nav>
 </header>
 
+<nav class="float" aria-label="Sections"><div class="in"><a href="#top">↑</a><a href="#what">Seeing</a><a href="#cycle">Cycle</a><a href="#hud">Screen</a><a href="#glitch-images">Images</a><a href="#glitch-quotes">Quotes</a><a href="#hardware">Hardware</a><a href="#bom">Parts</a><a href="#software">Software</a><a href="#bitchat">Talk to it</a><a href="#journey">Build log</a><a href="#challenges">Challenges</a><a href="#numbers">Numbers</a><a href="#status">Status</a></div><div class="bar"></div></nav>
 <main>
 
 <!-- ============================================================ -->
@@ -701,6 +716,24 @@ should be identified), saving clips to the SD card (memories must stay ephemeral
   });
   hit.addEventListener('pointerleave',()=>{tip.style.display='none';cx.setAttribute('opacity','0')});
   document.querySelector('#battab tbody').innerHTML=d.map(p=>`<tr><td>${fmt(p[0])}</td><td class="num">${p[1]} %</td></tr>`).join('');
+})();
+
+// floating section menu: shown after the hero, highlights the section being read
+(()=>{
+  const nav=document.querySelector('nav.float'), bar=nav.querySelector('.bar'), hero=document.querySelector('header.hero');
+  const links=[...nav.querySelectorAll('a')].filter(a=>a.hash!=='#top');
+  const secs=links.map(a=>document.getElementById(a.hash.slice(1)));
+  let cur=null;
+  function upd(){
+    nav.classList.toggle('on',hero.getBoundingClientRect().bottom<0);
+    let i=-1; secs.forEach((h,k)=>{if(h.getBoundingClientRect().top<120)i=k;});
+    if(window.innerHeight+scrollY>=document.documentElement.scrollHeight-4)i=secs.length-1;
+    const a=links[i]||null;
+    if(a!==cur){cur&&cur.classList.remove('act');cur=a;
+      if(a){a.classList.add('act');const box=a.parentNode;box.scrollTo({left:a.offsetLeft-box.clientWidth/2+a.clientWidth/2,behavior:'smooth'});}}
+    const h=document.documentElement.scrollHeight-innerHeight; bar.style.width=(h>0?scrollY/h*100:0)+'%';
+  }
+  addEventListener('scroll',upd,{passive:true}); addEventListener('resize',upd); upd();
 })();
 </script>
 </body>
