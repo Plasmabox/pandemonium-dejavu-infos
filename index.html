@@ -281,9 +281,9 @@ déjà vu doesn't come smoothly, it comes in jolts.</p>
 touching the screen at the party can't change anything by accident. Tap outside to close it; it also closes
 after 4 s of inactivity. Every setting survives a reboot (stored in flash when the panel closes).</p>
 <figure>
-<svg viewBox="0 0 440 438" role="img" aria-labelledby="panel-t" style="max-width:440px;background:#0d0e12">
-  <title id="panel-t">The control panel: five sliders (screen brightness, displays brightness, mic sensitivity, kick sensitivity, glitch frequency), then TERMINATOR MODE, FILTER and a RED/CYAN button, then BITCHAT LOG and a CLEAR CHAT button.</title>
-  <rect x=".5" y=".5" width="439" height="437" fill="#2E2F39" fill-opacity=".92" stroke="#22E5FF"/>
+<svg viewBox="0 0 440 476" role="img" aria-labelledby="panel-t" style="max-width:440px;background:#0d0e12">
+  <title id="panel-t">The control panel: five sliders (screen brightness, displays brightness, mic sensitivity, kick sensitivity, glitch frequency), then TERMINATOR MODE, FILTER and a RED/CYAN button, then BITCHAT LOG and a CLEAR CHAT button, then PAUSE.</title>
+  <rect x=".5" y=".5" width="439" height="475" fill="#2E2F39" fill-opacity=".92" stroke="#22E5FF"/>
   <g font-size="13" fill="#A9ADBC">
     <text x="14" y="32">SCREEN BRIGHTNESS</text><text x="14" y="94">DISPLAYS BRIGHTNESS</text>
     <text x="14" y="156">MIC SENSITIVITY</text><text x="14" y="218">KICK SENSITIVITY</text>
@@ -308,8 +308,9 @@ after 4 s of inactivity. Every setting survives a reboot (stored in flash when t
     <rect x="346" y="326" width="80" height="26" fill="none" stroke="#22E5FF"/><text x="386" y="344" text-anchor="middle">RED</text>
     <rect x="14" y="368" width="16" height="16" fill="#22E5FF"/><text x="38" y="381">BITCHAT LOG</text>
     <rect x="286" y="364" width="140" height="26" fill="none" stroke="#22E5FF"/><text x="356" y="382" text-anchor="middle">CLEAR CHAT</text>
+    <rect x="14" y="406" width="16" height="16" fill="none" stroke="#22E5FF"/><text x="38" y="419">PAUSE (NO RECORDING, NO RECALL)</text>
   </g>
-  <text x="220" y="424" font-size="11" fill="#6C7080" text-anchor="middle">LONG PRESS: OPEN  |  BOOT BUTTON: NEXT STEP</text>
+  <text x="220" y="462" font-size="11" fill="#6C7080" text-anchor="middle">LONG PRESS: OPEN  |  BOOT BUTTON: NEXT STEP</text>
 </svg>
 <figcaption>The panel as it appears over the video, with the default values.</figcaption>
 </figure>
@@ -326,6 +327,7 @@ after 4 s of inactivity. Every setting survives a reboot (stored in flash when t
 <tr><td><b>FILTER</b> + <b>RED | CYAN</b></td><td>on / off (on), red / cyan (red)</td><td>Only in TERMINATOR mode: tints the video red or cyan (the brackets follow the same colour). Free: it's a second grey-to-colour lookup table.</td></tr>
 <tr><td><b>BITCHAT LOG</b></td><td>on / off (on)</td><td>Shows or hides the chat messages over the video. Hidden messages are still received and logged.</td></tr>
 <tr><td><b>CLEAR CHAT</b></td><td>button</td><td>Wipes the notification and the bubbles on screen, same as the owner's private <span class="mono">!clear_log</span> command.</td></tr>
+<tr><td><b>PAUSE</b></td><td>on / off (off, always off after a reboot)</td><td>Stops the memory cycle for a taxi ride or a bathroom break, so a cover over the lens doesn't fill the memory bank with black. The clip being recorded is kept, nothing is recorded, replayed or glitched, and the video shows a dim "PAUSED". Unticking starts a fresh LIVE cycle; memories keep their real age.</td></tr>
 </tbody></table></div>
 <p>Backup if the touch screen fails to start: the board's <b>BOOT</b> button steps the screen brightness through 100 / 70 / 45 / 25 / 10 % and shows the panel.</p>
 
