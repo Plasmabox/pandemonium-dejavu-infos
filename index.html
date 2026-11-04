@@ -49,6 +49,7 @@ td.num,th.num{text-align:right;white-space:nowrap;font-family:var(--mono)}
 .gq .q{aspect-ratio:1;display:flex;align-items:center;justify-content:center;text-align:center;background:#000;color:#fff;
   font:400 clamp(.9rem,2.6vw,1.15rem)/1.05 Impact,"Haettenschweiler","Arial Narrow Bold",sans-serif;letter-spacing:.02em;padding:10px}
 .gl figcaption,.gq figcaption{padding:8px 10px;margin:0;font-size:.8rem;line-height:1.35}
+.big{font:700 2rem var(--mono);color:var(--cyan);margin-bottom:6px}
 .yr{font-family:var(--mono);color:var(--red);font-weight:600}
 
 /* hero */
@@ -132,16 +133,16 @@ footer{border-top:1px solid var(--edge);margin-top:70px;padding-top:18px;color:v
   time, nicknames, text) for its owner. Only write what you'd be fine seeing on a screen and kept.</li>
   </ul>
   Nothing is uploaded: the costume has no Wi-Fi and no internet connection.</div>
-  <div class="meta">STATUS: WORK IN PROGRESS · LAST UPDATE 2026-10-31</div>
+  <div class="meta">STATUS: WORK IN PROGRESS · LAST UPDATE 2026-11-04</div>
   <nav class="toc">
     <a href="#what">What you're seeing</a><a href="#cycle">The memory cycle</a>
     <a href="#hud">The screen</a><a href="#glitch-images">Glitches</a><a href="#hardware">Hardware</a><a href="#bom">Parts &amp; cost</a>
-    <a href="#software">Software</a><a href="#bitchat">Talk to it</a><a href="#journey">Build log</a>
+    <a href="#software">Software</a><a href="#bitchat">Talk to it</a><a href="#journey">Build log</a><a href="#effort">The work</a>
     <a href="#challenges">Challenges</a><a href="#numbers">Numbers</a><a href="#status">Status</a>
   </nav>
 </header>
 
-<nav class="float" aria-label="Sections"><div class="in"><a href="#top">↑</a><a href="#what">Seeing</a><a href="#cycle">Cycle</a><a href="#hud">Screen</a><a href="#glitch-images">Images</a><a href="#glitch-quotes">Quotes</a><a href="#hardware">Hardware</a><a href="#bom">Parts</a><a href="#software">Software</a><a href="#bitchat">Talk to it</a><a href="#journey">Build log</a><a href="#challenges">Challenges</a><a href="#numbers">Numbers</a><a href="#status">Status</a></div><div class="bar"></div></nav>
+<nav class="float" aria-label="Sections"><div class="in"><a href="#top">↑</a><a href="#what">Seeing</a><a href="#cycle">Cycle</a><a href="#hud">Screen</a><a href="#glitch-images">Images</a><a href="#glitch-quotes">Quotes</a><a href="#hardware">Hardware</a><a href="#bom">Parts</a><a href="#software">Software</a><a href="#bitchat">Talk to it</a><a href="#journey">Build log</a><a href="#effort">The work</a><a href="#challenges">Challenges</a><a href="#numbers">Numbers</a><a href="#status">Status</a></div><div class="bar"></div></nav>
 <main>
 
 <!-- ============================================================ -->
@@ -565,10 +566,28 @@ are logged on the costume's SD card.</li>
 
 <!-- ============================================================ -->
 <h2 id="journey">Build log</h2>
-<p class="lead">From unboxing to party, in milestones that each had to work before the next.</p>
+<p class="lead">From the theme announcement to the party: ten weeks, in milestones that each had to work before the next.</p>
 <div class="tl">
+  <div class="ev pivot"><div class="date">2026-08-25</div><h3>The theme drops</h3>
+    <p>Pandémonium VII announces "Déjà Vu". Same day, the idea: a camera that films the crowd and a
+    screen that plays it back later, cut with subliminal flashes from films about time.</p></div>
+  <div class="ev"><div class="date">late August</div><h3>Which costume?</h3>
+    <p>Brainstorm with Claude (desktop app): motion-capture suit, a body worn backwards, merch from
+    a future edition, a Mandela-effect character, time travellers from films… Then the DIY idea
+    wins: a futuristic suit with cameras that record the party and screens that replay it late.</p></div>
+  <div class="ev"><div class="date">early September</div><h3>Shrinking the plan</h3>
+    <p>First draft: a Raspberry Pi, two cameras (front and back), two big screens, a Bluetooth
+    scanner. Pi prices had jumped, so a second-hand x86 mini-PC was hunted on Facebook
+    Marketplace — then dropped: too heavy and power-hungry to dance all night. Old iPads
+    considered too. The answer: an ESP32-P4 board that is both computer and 7″ screen, one camera,
+    one screen, no soldering, no 3D printer.</p></div>
+  <div class="ev"><div class="date">2026-09-08</div><h3>Ordered</h3>
+    <p>One Amazon cart (board, IR camera, power bank, standoffs, velcro, cables, spare ribbon,
+    128 GB card). Same conversation fixes the rules: object detection out (too heavy), slow motion
+    instead of strobe (photosensitive safety). Claude Desktop writes the Claude Code project brief,
+    and keeps writing prompts for it until mid-September.</p></div>
   <div class="ev"><div class="date">2026-09-09 → 09-10</div><h3>Toolchain &amp; first light</h3>
-    <p>ESP-IDF pinned to the exact version of the board vendor. The chip turns out to be revision
+    <p>Parts arrive; development starts in Claude Code. ESP-IDF pinned to the exact version of the board vendor. The chip turns out to be revision
     1.3 while every vendor example targets 3.x — every build needs a different config profile.
     Factory firmware flashed, live camera on screen.</p></div>
   <div class="ev"><div class="date">2026-09-11</div><h3>The 15-second delay</h3>
@@ -580,6 +599,9 @@ are logged on the costume's SD card.</li>
     <p>Firmware restarted from a minimal base, split into components. A throwaway proof of concept
     showed H.264 would hold far more video in the same memory — but that encoder and decoder
     can't coexist. Result: the LIVE/RECALL cycle and the random memory bank.</p></div>
+  <div class="ev"><div class="date">2026-09-16 → 09-18</div><h3>First glitches, first HUD frame</h3>
+    <p>Still images from the SD card flashed between clips, a scrolling log, and the first
+    full-screen HUD frame baked into flash.</p></div>
   <div class="ev"><div class="date">2026-09-30 → 10-02</div><h3>The HUD</h3>
     <p>Telemetry column, picked from full-size animated HTML mock-ups. HUD frame redesigned three
     times; its cost on the video cut by baking it into a per-pixel table (10.7 → 15.8 fps).
@@ -595,8 +617,46 @@ are logged on the costume's SD card.</li>
     refresh.</p></div>
   <div class="ev"><div class="date">2026-10-09 → 10-10</div><h3>Endurance test</h3>
     <p>Everything at max brightness, all options on: 12 h 56 on battery, 10 % left.</p></div>
+  <div class="ev"><div class="date">2026-10-20 → 10-31</div><h3>Going public</h3>
+    <p>This page, published with a QR code. bitchat chats logged on the SD card, an EN/FR
+    auto-reply for strangers, 15 more films in the glitch set. Costume settled: painted football
+    shoulder pads carry the electronics.</p></div>
+  <div class="ev"><div class="date">2026-11-01 → 11-06</div><h3>Mounting</h3>
+    <p>A 3 mm PVC plate drilled from a 1:1 printed plan holds the screen, the camera and the three
+    displays, bolted through the chest pad.</p></div>
   <div class="ev pivot"><div class="date">2026-11-07</div><h3>Party</h3><p>Pandémonium VII, Montréal.</p></div>
 </div>
+
+<!-- ============================================================ -->
+<h2 id="effort">The work</h2>
+<p class="lead">One person, evenings and weekends, with an AI pair programmer.</p>
+<div class="grid g3">
+  <div class="card"><div class="big">≈ 105 h</div><h3>Total human time</h3>
+    <p>Estimate, Aug 25 → Nov 7: ~15 h of ideas, research and shopping with Claude Desktop
+    (a 330-page conversation), ~70 h of development sessions, ~20 h of hands-on work (wiring,
+    bench tests, mounting, costume).</p></div>
+  <div class="card"><div class="big">≈ 70 h</div><h3>Claude Code</h3>
+    <p>Active session time, Sep 9 → Nov 4. 20 h are measured from the session logs still on
+    disk (Oct 5 onward); the September sessions were purged after 30 days and are estimated
+    from the git history (11 working days, 94 commits).</p></div>
+  <div class="card"><div class="big">≈ 11 500</div><h3>Lines of code</h3>
+    <p>Hand-written, blank lines excluded: ~9 100 lines of C on the ESP32-P4, ~1 650 on the
+    ESP32-C6 (bitchat), ~320 for the focus tool, ~450 of Python/shell tooling.</p></div>
+</div>
+<div class="scroll"><table>
+<thead><tr><th>What</th><th class="num">Lines</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>ESP32-P4 firmware (C)</td><td class="num">9 144</td><td>9 components; the biggest is the 3D object renderer (3 200 lines)</td></tr>
+<tr><td>ESP32-C6 bitchat peer (C)</td><td class="num">1 649</td><td>BLE, Noise XX handshake, signatures</td></tr>
+<tr><td>Focus tool (C)</td><td class="num">322</td><td>Separate firmware to focus the lens</td></tr>
+<tr><td>Tooling (Python, shell)</td><td class="num">456</td><td>Image and font converters, flashing, publishing</td></tr>
+<tr><td>HTML mock-ups</td><td class="num">6 471</td><td>27 animated galleries used to pick every HUD widget</td></tr>
+<tr><td>This page</td><td class="num">≈ 700</td><td>Hand-made, no framework</td></tr>
+<tr><td class="m">Generated (fonts, images)</td><td class="num m">128 888</td><td class="m">Not counted above</td></tr>
+</tbody></table></div>
+<p class="m" style="font-size:.9rem">126 commits. Two tools: Claude Desktop for the ideas, the parts
+and, early on, writing the prompts; Claude Code for every line of code (Opus and Sonnet). The
+decisions, the tests on real hardware and the assembly were human.</p>
 
 <!-- ============================================================ -->
 <h2 id="challenges">Challenges &amp; solutions</h2>
