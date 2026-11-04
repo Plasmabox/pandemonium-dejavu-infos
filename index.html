@@ -52,7 +52,7 @@ td.num,th.num{text-align:right;white-space:nowrap;font-family:var(--mono)}
 .yr{font-family:var(--mono);color:var(--red);font-weight:600}
 
 /* hero */
-header.hero{min-height:min(88vh,760px);display:flex;flex-direction:column;justify-content:center;max-width:980px;margin:0 auto;padding:40px 18px}
+header.hero{min-height:min(88vh,760px);display:flex;flex-direction:column;justify-content:center;max-width:980px;margin:0 auto;padding:80px 18px 40px}
 .hero .kicker{font:600 12px var(--mono);letter-spacing:.2em;color:var(--muted)}
 .hero h1{font-size:clamp(3rem,13vw,7.5rem);margin:.1em 0;color:var(--ink);position:relative;letter-spacing:.04em}
 .hero h1 span{color:var(--cyan)}
@@ -70,8 +70,7 @@ nav.toc a{color:var(--ink2);text-decoration:none;border-bottom:1px dotted var(--
 
 /* floating section menu */
 nav.float{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(20,21,27,.92);backdrop-filter:blur(6px);
-  border-bottom:1px solid var(--edge);transform:translateY(-100%);transition:transform .25s}
-nav.float.on{transform:none}
+  border-bottom:1px solid var(--edge)}
 nav.float .in{max-width:980px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:0 12px}
 nav.float .in::-webkit-scrollbar{display:none}
 nav.float a{flex:none;font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
@@ -80,7 +79,6 @@ nav.float a:hover{color:var(--ink)}
 nav.float a.act{color:var(--cyan);border-bottom-color:var(--cyan)}
 nav.float .bar{position:absolute;left:0;bottom:-1px;height:1px;background:var(--cyan);width:0}
 h2[id]{scroll-margin-top:56px}
-@media (prefers-reduced-motion:reduce){nav.float{transition:none}}
 
 /* timeline */
 .tl{border-left:2px solid var(--edge);margin:18px 0 0 6px;padding-left:20px}
@@ -718,14 +716,13 @@ should be identified), saving clips to the SD card (memories must stay ephemeral
   document.querySelector('#battab tbody').innerHTML=d.map(p=>`<tr><td>${fmt(p[0])}</td><td class="num">${p[1]} %</td></tr>`).join('');
 })();
 
-// floating section menu: shown after the hero, highlights the section being read
+// floating section menu: always visible, highlights the section being read
 (()=>{
-  const nav=document.querySelector('nav.float'), bar=nav.querySelector('.bar'), hero=document.querySelector('header.hero');
+  const nav=document.querySelector('nav.float'), bar=nav.querySelector('.bar');
   const links=[...nav.querySelectorAll('a')].filter(a=>a.hash!=='#top');
   const secs=links.map(a=>document.getElementById(a.hash.slice(1)));
   let cur=null;
   function upd(){
-    nav.classList.toggle('on',hero.getBoundingClientRect().bottom<0);
     let i=-1; secs.forEach((h,k)=>{if(h.getBoundingClientRect().top<120)i=k;});
     if(window.innerHeight+scrollY>=document.documentElement.scrollHeight-4)i=secs.length-1;
     const a=links[i]||null;
