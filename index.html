@@ -42,6 +42,14 @@ th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--edge);verti
 th{font:600 12px var(--mono);letter-spacing:.06em;color:var(--ink2);text-transform:uppercase}
 td.num,th.num{text-align:right;white-space:nowrap;font-family:var(--mono)}
 .scroll{overflow-x:auto}
+.glgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.gl,.gq{margin:0;background:var(--card);border:1px solid var(--edge)}
+.gl img{display:block;width:100%;height:auto;aspect-ratio:1;filter:grayscale(1) contrast(1.1);transition:filter .3s}
+.gl:hover img{filter:none}
+.gq .q{aspect-ratio:1;display:flex;align-items:center;justify-content:center;text-align:center;background:#000;color:#fff;
+  font:400 clamp(.9rem,2.6vw,1.15rem)/1.05 Impact,"Haettenschweiler","Arial Narrow Bold",sans-serif;letter-spacing:.02em;padding:10px}
+.gl figcaption,.gq figcaption{padding:8px 10px;margin:0;font-size:.8rem;line-height:1.35}
+.yr{font-family:var(--mono);color:var(--red);font-weight:600}
 
 /* hero */
 header.hero{min-height:min(88vh,760px);display:flex;flex-direction:column;justify-content:center;max-width:980px;margin:0 auto;padding:40px 18px}
@@ -115,7 +123,7 @@ footer{border-top:1px solid var(--edge);margin-top:70px;padding-top:18px;color:v
   <div class="meta">STATUS: WORK IN PROGRESS · LAST UPDATE 2026-10-31</div>
   <nav class="toc">
     <a href="#what">What you're seeing</a><a href="#cycle">The memory cycle</a>
-    <a href="#hud">The screen</a><a href="#hardware">Hardware</a><a href="#bom">Parts &amp; cost</a>
+    <a href="#hud">The screen</a><a href="#glitch-images">Glitches</a><a href="#hardware">Hardware</a><a href="#bom">Parts &amp; cost</a>
     <a href="#software">Software</a><a href="#bitchat">Talk to it</a><a href="#journey">Build log</a>
     <a href="#challenges">Challenges</a><a href="#numbers">Numbers</a><a href="#status">Status</a>
   </nav>
@@ -254,6 +262,140 @@ déjà vu doesn't come smoothly, it comes in jolts.</p>
   being replayed.</p></div>
 </div>
 
+<h2 id="glitch-images">Glitch images</h2>
+<p class="lead">26 stills from films about time, on the SD card. At a cut, one of them may flash
+for a quarter of a second, in black &amp; white like the video, while the red DESTINATION TIME display
+flashes the film's year. Hover to see the original colour.</p>
+<div class="glgrid">
+  <figure class="gl"><img src="img/glitch/TIME001.jpg" alt="Still from The Time Machine (1960)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1960</span> <b>The Time Machine</b><br>Rod Taylor at the controls of George Pal's Victorian time sled.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/JETEE0011.jpg" alt="Still from La Jetée (1962)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1962</span> <b>La Jetée</b><br>Chris Marker's film told almost entirely in still photographs: a man sent back to a memory of a face.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/APE001.jpg" alt="Still from Planet of the Apes (1968)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1968</span> <b>Planet of the Apes</b><br>The beach, the statue: the far future was home all along.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/HAL001.jpg" alt="Still from 2001: A Space Odyssey (1968)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1968</span> <b>2001: A Space Odyssey</b><br>HAL 9000's unblinking eye.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/ARNO001.jpg" alt="Still from The Terminator (1984)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1984</span> <b>The Terminator</b><br>Sent back from 2029 to change one night in 1984.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/DOC002.jpg" alt="Still from Back to the Future (1985)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1985</span> <b>Back to the Future</b><br>Twin Pines Mall, 1:20 a.m.: Doc and Marty time the first jump.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/DOC001.jpg" alt="Still from Back to the Future (1985)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1985</span> <b>Back to the Future</b><br>Great Scott.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/BIFF001.jpg" alt="Still from Back to the Future Part II (1989)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1989</span> <b>Back to the Future Part II</b><br>The alternate 1985: Biff Tannen's Pleasure Paradise.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/KEAN001.jpg" alt="Still from Bill & Ted's Excellent Adventure (1989)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1989</span> <b>Bill &amp; Ted's Excellent Adventure</b><br>Two slackers, one phone booth, all of history.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/BILL001.jpg" alt="Still from Groundhog Day (1993)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1993</span> <b>Groundhog Day</b><br>Phil Connors takes the groundhog for a drive.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/BILL002.jpg" alt="Still from Groundhog Day (1993)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1993</span> <b>Groundhog Day</b><br>Snowed in at Punxsutawney. Again.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/BRUCE001.jpg" alt="Still from 12 Monkeys (1995)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1995</span> <b>12 Monkeys</b><br>Cole collecting samples in the frozen, empty future.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/BRUCE002.jpg" alt="Still from 12 Monkeys (1995)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1995</span> <b>12 Monkeys</b><br>Cole meets Jeffrey Goines in the asylum.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/CONTACT001.jpg" alt="Still from Contact (1997)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1997</span> <b>Contact</b><br>The Machine: a journey that lasts zero seconds on Earth.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/TYLER001.jpg" alt="Still from Fight Club (1999)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">1999</span> <b>Fight Club</b><br>Tyler Durden — the single-frame flash that inspired the glitches.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/FRANK001.jpg" alt="Still from Donnie Darko (2001)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">2001</span> <b>Donnie Darko</b><br>Frank, the rabbit counting down to the end of the world.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/FRANK002.jpg" alt="Still from Donnie Darko (2001)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">2001</span> <b>Donnie Darko</b><br>Frank, up close.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/FRANK003.jpg" alt="Still from Donnie Darko (2001)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">2001</span> <b>Donnie Darko</b><br>Donnie, Gretchen and Frank at the movies.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/PRIME001.jpg" alt="Still from Primer (2004)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">2004</span> <b>Primer</b><br>The garage-built box that folds time.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/SOURCE001.jpg" alt="Still from Source Code (2011)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">2011</span> <b>Source Code</b><br>The same eight minutes on a commuter train, over and over.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/LOOP001.jpg" alt="Still from Looper (2012)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">2012</span> <b>Looper</b><br>Old Joe and young Joe at the diner.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/EDGE001.jpg" alt="Still from Edge of Tomorrow (2014)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">2014</span> <b>Edge of Tomorrow</b><br>Live. Die. Repeat.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/INTER001.jpg" alt="Still from Interstellar (2014)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">2014</span> <b>Interstellar</b><br>Endurance near Gargantua, where one hour costs seven years.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/PRED001.jpg" alt="Still from Predestination (2014)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">2014</span> <b>Predestination</b><br>The barkeep and his customer: the tightest time loop on film.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/ARIV001.jpg" alt="Still from Arrival (2016)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">2016</span> <b>Arrival</b><br>Louise learns a language that unhooks memory from time.</figcaption></figure>
+  <figure class="gl"><img src="img/glitch/TENET001.jpg" alt="Still from Tenet (2020)" width="240" height="240" loading="lazy">
+    <figcaption><span class="yr">2020</span> <b>Tenet</b><br>The Protagonist, in a world running backwards.</figcaption></figure>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="glitch-quotes">Glitch quotes</h2>
+<p class="lead">Half of the glitches are words instead of images: 33 lines from films about time,
+stretched white on black across the video for a quarter of a second — with the year on the red display
+too. They work even without the SD card.</p>
+<div class="glgrid">
+  <figure class="gq"><div class="q">I'M SORRY<br>DAVE</div>
+    <figcaption><span class="yr">1968</span> <b>2001: A Space Odyssey</b><br>HAL refuses to open the pod bay doors.</figcaption></figure>
+  <figure class="gq"><div class="q">I'LL BE<br>BACK</div>
+    <figcaption><span class="yr">1984</span> <b>The Terminator</b><br>He was.</figcaption></figure>
+  <figure class="gq"><div class="q">1.21<br>GIGAWATTS</div>
+    <figcaption><span class="yr">1985</span> <b>Back to the Future</b><br>The power the flux capacitor needs.</figcaption></figure>
+  <figure class="gq"><div class="q">OBEY</div>
+    <figcaption><span class="yr">1988</span> <b>They Live</b><br>The subliminal message hidden in every billboard.</figcaption></figure>
+  <figure class="gq"><div class="q">STAY<br>ASLEEP</div>
+    <figcaption><span class="yr">1988</span> <b>They Live</b><br>Another hidden billboard command.</figcaption></figure>
+  <figure class="gq"><div class="q">TWO<br>WEEKS</div>
+    <figcaption><span class="yr">1990</span> <b>Total Recall</b><br>The malfunctioning disguise.</figcaption></figure>
+  <figure class="gq"><div class="q">6:00 AM</div>
+    <figcaption><span class="yr">1993</span> <b>Groundhog Day</b><br>The alarm that restarts the same day.</figcaption></figure>
+  <figure class="gq"><div class="q">I GOT<br>YOU BABE</div>
+    <figcaption><span class="yr">1993</span> <b>Groundhog Day</b><br>The song on the radio, every single morning.</figcaption></figure>
+  <figure class="gq"><div class="q">SLEEP</div>
+    <figcaption><span class="yr">1998</span> <b>Dark City</b><br>The Strangers stop the city every midnight.</figcaption></figure>
+  <figure class="gq"><div class="q">DEJA VU</div>
+    <figcaption><span class="yr">1999</span> <b>The Matrix</b><br>A déjà vu is a glitch in the Matrix.</figcaption></figure>
+  <figure class="gq"><div class="q">FOLLOW THE<br>WHITE RABBIT</div>
+    <figcaption><span class="yr">1999</span> <b>The Matrix</b><br>On Neo's screen.</figcaption></figure>
+  <figure class="gq"><div class="q">THERE IS<br>NO SPOON</div>
+    <figcaption><span class="yr">1999</span> <b>The Matrix</b><br>The spoon boy.</figcaption></figure>
+  <figure class="gq"><div class="q">WAKE UP</div>
+    <figcaption><span class="yr">1999</span> <b>The Matrix</b><br>Neo's screen, before the white rabbit.</figcaption></figure>
+  <figure class="gq"><div class="q">WHERE IS<br>MY MIND?</div>
+    <figcaption><span class="yr">1999</span> <b>Fight Club</b><br>The Pixies over the final scene.</figcaption></figure>
+  <figure class="gq"><div class="q">DON'T BELIEVE<br>HIS LIES</div>
+    <figcaption><span class="yr">2000</span> <b>Memento</b><br>Written on a Polaroid.</figcaption></figure>
+  <figure class="gq"><div class="q">REMEMBER<br>SAMMY JANKIS</div>
+    <figcaption><span class="yr">2000</span> <b>Memento</b><br>Tattooed on Leonard's hand.</figcaption></figure>
+  <figure class="gq"><div class="q">28:06:42:12</div>
+    <figcaption><span class="yr">2001</span> <b>Donnie Darko</b><br>28 days, 6 hours, 42 minutes, 12 seconds until the end of the world.</figcaption></figure>
+  <figure class="gq"><div class="q">CELLAR<br>DOOR</div>
+    <figcaption><span class="yr">2001</span> <b>Donnie Darko</b><br>"The most beautiful words in the English language."</figcaption></figure>
+  <figure class="gq"><div class="q">OPEN YOUR<br>EYES</div>
+    <figcaption><span class="yr">2001</span> <b>Vanilla Sky</b><br>Remake of <i>Abre los ojos</i> (1997).</figcaption></figure>
+  <figure class="gq"><div class="q">WHY ARE YOU<br>WEARING THAT<br>STUPID<br>MAN SUIT?</div>
+    <figcaption><span class="yr">2001</span> <b>Donnie Darko</b><br>Frank, answering Donnie.</figcaption></figure>
+  <figure class="gq"><div class="q">CAN YOU<br>SEE?</div>
+    <figcaption><span class="yr">2002</span> <b>Minority Report</b><br>Agatha, the precog.</figcaption></figure>
+  <figure class="gq"><div class="q">EVERYBODY<br>RUNS</div>
+    <figcaption><span class="yr">2002</span> <b>Minority Report</b><br>Anderton.</figcaption></figure>
+  <figure class="gq"><div class="q">YOU STILL HAVE<br>A CHOICE</div>
+    <figcaption><span class="yr">2002</span> <b>Minority Report</b><br>Agatha.</figcaption></figure>
+  <figure class="gq"><div class="q">CHANGE ONE THING,<br>CHANGE<br>EVERYTHING</div>
+    <figcaption><span class="yr">2004</span> <b>The Butterfly Effect</b><br>Tagline.</figcaption></figure>
+  <figure class="gq"><div class="q">2 MINUTES</div>
+    <figcaption><span class="yr">2007</span> <b>Next</b><br>How far ahead he can see.</figcaption></figure>
+  <figure class="gq"><div class="q">THE ONLY THING<br>THAT'S REAL<br>IS YOU</div>
+    <figcaption><span class="yr">2009</span> <b>Surrogates</b><br>Poster tagline.</figcaption></figure>
+  <figure class="gq"><div class="q">WE NEED TO<br>GO DEEPER</div>
+    <figcaption><span class="yr">2010</span> <b>Inception</b><br>Dreams within dreams.</figcaption></figure>
+  <figure class="gq"><div class="q">TIME TRAVEL<br>HAS NOT YET<br>BEEN INVENTED</div>
+    <figcaption><span class="yr">2012</span> <b>Looper</b><br>Opening narration.</figcaption></figure>
+  <figure class="gq"><div class="q">COME FIND ME<br>WHEN YOU<br>WAKE UP</div>
+    <figcaption><span class="yr">2014</span> <b>Edge of Tomorrow</b><br>Rita, to Cage.</figcaption></figure>
+  <figure class="gq"><div class="q">LIVE.<br>DIE.<br>REPEAT.</div>
+    <figcaption><span class="yr">2014</span> <b>Edge of Tomorrow</b><br>Tagline.</figcaption></figure>
+  <figure class="gq"><div class="q">STAY</div>
+    <figcaption><span class="yr">2014</span> <b>Interstellar</b><br>The message through the bookshelf.</figcaption></figure>
+  <figure class="gq"><div class="q">MERCURY</div>
+    <figcaption><span class="yr">2020</span> <b>Flashback</b><br>The drug that scrambles time.</figcaption></figure>
+  <figure class="gq"><div class="q">WHAT'S HAPPENED<br>HAPPENED</div>
+    <figcaption><span class="yr">2020</span> <b>Tenet</b><br>Neil's fatalism.</figcaption></figure>
+</div>
+
+<!-- ============================================================ -->
 <!-- ============================================================ -->
 <h2 id="hardware">Hardware</h2>
 <p class="lead">One board does almost everything. Power comes from a single USB-C battery.</p>
@@ -320,21 +462,37 @@ déjà vu doesn't come smoothly, it comes in jolts.</p>
 
 <!-- ============================================================ -->
 <h2 id="bom">Parts &amp; cost</h2>
-<p class="lead">Approximate street prices (USD, October 2026). Prices move — treat as ballpark.</p>
+<p class="lead">What was actually bought, at Amazon.ca list prices in Canadian dollars before tax (November 2026). Most items are multi-packs: the costume uses a fraction of them.</p>
 <div class="scroll"><table>
-<thead><tr><th>Part</th><th>Role</th><th class="num">≈ USD</th></tr></thead>
+<thead><tr><th>Part</th><th>Role</th><th class="num">CAD</th></tr></thead>
 <tbody>
-<tr><td>Waveshare <b>ESP32-P4-WIFI6-Touch-LCD-7B</b></td><td>The brain and the screen: ESP32-P4 + ESP32-C6, 7″ 1024×600 touch display, MIPI-CSI camera port, microSD slot, mics, USB-C power</td><td class="num">47–56</td></tr>
-<tr><td>Arducam <b>OV5647 NoIR</b>, motorised IR-cut + IR LED boards</td><td>Camera + infrared illumination in one piece (15-pin 1.0 mm CSI cable)</td><td class="num">32–35</td></tr>
-<tr><td><b>INIU</b> 20 000 mAh 45 W USB-C power bank</td><td>Powers everything for ~14 h</td><td class="num">20–37</td></tr>
-<tr><td>3 × <b>TM1637</b> 4-digit 7-segment modules (red, green, orange)</td><td>"Time circuits"</td><td class="num">6–12</td></tr>
-<tr><td>microSDXC 128 GB UHS</td><td>Glitch images (way more than needed)</td><td class="num">12–15</td></tr>
-<tr><td>USB-UART cable (CP2102N)</td><td>Flashing the ESP32-C6 radio chip</td><td class="num">≈ 8</td></tr>
-<tr><td>Spare 15-pin FFC camera cable, Dupont wires</td><td>Wiring</td><td class="num">≈ 8</td></tr>
-<tr><td>M2 nylon standoffs, adhesive velcro, short USB-C cables</td><td>Mounting</td><td class="num">≈ 15</td></tr>
-<tr><td>3 opaque caps</td><td>Lock the camera in night mode (see challenges)</td><td class="num">≈ 0</td></tr>
+<tr><th colspan="3">Electronics</th></tr>
+<tr><td>Waveshare <b>ESP32-P4-WIFI6-Touch-LCD-7B</b></td><td>The brain and the screen: ESP32-P4 + ESP32-C6, 7″ 1024×600 touch display, MIPI-CSI camera port, microSD slot, mics, USB-C power</td><td class="num">87.99</td></tr>
+<tr><td>Arducam <b>OV5647 NoIR</b>, motorised IR-cut + IR LED boards</td><td>Camera + infrared illumination in one piece</td><td class="num">32.99</td></tr>
+<tr><td><b>INIU</b> 20 000 mAh 45 W USB-C power bank</td><td>Powers everything for ~14 h</td><td class="num">39.59</td></tr>
+<tr><td>Lonely Binary <b>TM1637</b> 4-digit 7-segment modules, pack of 6</td><td>"Time circuits" (3 used: red, green, orange)</td><td class="num">29.99</td></tr>
+<tr><td>Lexar microSDXC 128 GB, A1 U3</td><td>Glitch images (way more than needed)</td><td class="num">46.99</td></tr>
+<tr><th colspan="3">Wiring &amp; flashing</th></tr>
+<tr><td>Pastall 15-pin FFC camera cables, pack of 6 (15/30/50 cm)</td><td>Camera ribbon, spares</td><td class="num">10.43</td></tr>
+<tr><td>DSD TECH SH-U09BL USB-UART cable (CP2102N)</td><td>Flashing the ESP32-C6 radio chip</td><td class="num">18.49</td></tr>
+<tr><td>Elegoo Dupont jumper wires, 120 pcs</td><td>Displays and serial wiring</td><td class="num">12.99</td></tr>
+<tr><td>Right-angle USB-C cables, pack of 2</td><td>Power bank → board</td><td class="num">12.99</td></tr>
+<tr><th colspan="3">Mounting</th></tr>
+<tr><td>Performore expanded PVC foam sheets, 3 mm, 30.5 × 30.5 cm, pack of 2</td><td>Rigid mounting plate for screen, camera and displays</td><td class="num">25.34</td></tr>
+<tr><td>Lystaii M2 nylon standoff kit, 320 pcs</td><td>Standoffs for the modules</td><td class="num">16.99</td></tr>
+<tr><td>Create idea M2 / M2.5 / M3 nylon standoff kit, 360 pcs</td><td>Standoffs and screws for the board</td><td class="num">12.99</td></tr>
+<tr><td>uxcell M2.5 black stainless washers (8 mm OD), 100 pcs</td><td>Board screws</td><td class="num">9.39</td></tr>
+<tr><td>uxcell M3.5 black stainless washers (11 mm OD), 100 pcs</td><td>Plate sandwich through the fabric (M3 screws)</td><td class="num">8.89</td></tr>
+<tr><td>EILKBLA adhesive hook-and-loop strips, 18 sets</td><td>Cables and small parts</td><td class="num">6.99</td></tr>
+<tr><td>ProTapes Pro Gaff tape, 2″ black</td><td>Covering the chest plate, cable runs</td><td class="num">30.00</td></tr>
+<tr><td>OneLeaf reusable cable ties, 80 pcs</td><td>Cable management</td><td class="num">9.99</td></tr>
+<tr><td>HANSTRONG GEAR MOLLE clips, pack of 3</td><td>Attaching gear to the harness</td><td class="num">11.98</td></tr>
+<tr><td>IronSeals MOLLE phone pouch</td><td>Carries the power bank</td><td class="num">11.20</td></tr>
+<tr><th colspan="3">Light control</th></tr>
+<tr><td>uxcell round rubber caps, orange, 50 pcs</td><td>Opaque caps on the 3 photoresistors: locks the camera in night mode (see challenges)</td><td class="num">12.99</td></tr>
+<tr><td>LED light-blocking stickers, pack of 2</td><td>Dimming / blacking out stray LEDs</td><td class="num">6.99</td></tr>
 </tbody>
-<tfoot><tr><th colspan="2">Electronics total (excluding the costume itself)</th><th class="num">≈ 150–185</th></tr></tfoot>
+<tfoot><tr><th colspan="2">Total (excluding the costume itself: shoulder pads, paint, fur)</th><th class="num">456.19</th></tr></tfoot>
 </table></div>
 
 <!-- ============================================================ -->
